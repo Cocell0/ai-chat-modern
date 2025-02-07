@@ -1,445 +1,85 @@
 // # app.js
 
-class CModal extends HTMLDialogElement {
-  static name = 'c-modal';
-
-  static get observedAttributes() {
-    return ['data-title'];
-  }
-
-  connectedCallback() {
-    const trap = focusTrap.createFocusTrap(this);
-    const head = document.createElement('div');
-    const title = document.createElement('h3');
-    const closeButton = document.createElement('c-button');
-
-    this.trap = trap;
-    this.addEventListener('close', () => this.trap.pause());
-    closeButton.addEventListener('click', () => this.close());
-
-    head.classList.add('head');
-    title.classList.add('title');
-    closeButton.classList.add('close-button');
-    closeButton.setAttribute('icon', 'close');
-    closeButton.setAttribute('variant', 'icon');
-
-    if (this.hasAttribute('data-title')) {
-      title.innerText = this.getAttribute('data-title');
-      head.prepend(title);
-    }
-
-    head.appendChild(closeButton);
-
-    this.prepend(head);
-  }
-
-  open() {
-    this.showModal();
-    this.trap.activate();
-  }
-
-  static {
-    customElements.define(this.name, this, { extends: 'dialog' });
-  }
-}
-class CRipple extends HTMLElement {
-  static name = 'c-ripple';
-
-  static style = new CSSStyleSheet();
-
-  constructor() {
-    super()
-    this.attachShadow({ mode: 'open' });
-    this.shadowRoot.adoptedStyleSheets = [CRipple.style];
-  }
-
-  ripple(event) {
-    this.rippleAnimation?.cancel();
-
-    const rect = this.surface.getBoundingClientRect();
-    const rippleSize = Math.max(rect.width, rect.height) * 1.2;
-
-    const startX = event.clientX - rect.left - rippleSize / 2;
-    const startY = event.clientY - rect.top - rippleSize / 2;
-    const centerX = rect.width / 2 - rippleSize / 2;
-    const centerY = rect.height / 2 - rippleSize / 2;
-
-    this.rippleAnimation = this.surface.animate({
-      height: [`${rippleSize}px`, `${rippleSize}px`],
-      width: [`${rippleSize}px`, `${rippleSize}px`],
-      top: [`${startY}px`, `${centerY}px`],
-      left: [`${startX}px`, `${centerX}px`],
-      transform: [`scale(0.2)`, `scale(2)`]
-    }, {
-      pseudoElement: '::after',
-      duration: 160,
-      easing: 'cubic-bezier(0.54, 0.13, 0.95, 0.54)',
-      fill: 'forwards'
-    });
-  }
-
-  connectedCallback() {
-    const surface = document.createElement('div');
-    surface.classList.add('surface');
-    this.shadowRoot.appendChild(surface);
-
-    this.surface = surface;
-
-    let element = surface;
-
-    if (this.hasAttribute('for')) {
-      const id = this.getAttribute('for');
-      element = document.getElementById(id) || this.parentElement.getElementById(id) || this.shadowRoot.getElementById(id);
-    }
-
-    element.addEventListener('pointerdown', (event) => {
-
-      this.ripple(event);
-      surface.classList.add('pressed');
-
-      window.addEventListener('pointerup', () => surface.classList.remove('pressed'), { once: true });
-      surface.addEventListener('pointerleave', () => surface.classList.remove('pressed'), { once: true });
-    });
-  }
-
-  static {
-    this.style.replaceSync(`
-  :host {
-    display: flex;
-    margin: auto;
-  }
-    
-  :host, .surface {
-    border-radius: inherit;
-    position: absolute;
-    inset: 0px;
-    overflow: hidden;
-  }
-
-  .surface::after {
-    content: "";
-    opacity: 0;
-    position: absolute;
-  }
-
-  .surface::before {
-    background-color: var(--ripple-hover, #1d1b20);
-    transition: opacity 15ms linear, background-color 15ms linear;
-  }
-
-  .surface::after {
-    background: radial-gradient(closest-side, var(--ripple, black), max(100% - 70px, 65%), transparent 100%);
-    transform-origin: center center;
-    transition: opacity 475ms ease-in-out, top 375ms linear, left 375ms linear, transform 1s linear;
-    display: flex;
-    position: absolute;
-  }
-
-  .pressed::after {
-    opacity: .16;
-    transition-duration: 105ms;
-  }
-  `);
-    customElements.define(this.name, this);
-  }
-}
-class COverlay extends HTMLElement {
-  constructor() {
-    super();
-  }
-
-  static name = 'c-overlay';
-
-  static get observedAttributes() {
-    return ['for'];
-  }
-
-  connectedCallback() {
-    const trap = focusTrap.createFocusTrap(this);
-    this.trap = trap;
-    const wrapper = document.createElement('div');
-    const surface = document.createElement('div');
-    const closeButton = document.createElement('c-button');
-    this.closeButton = closeButton;
-    const handler = document.getElementById(this.getAttribute('for'));
-
-    closeButton.classList.add('overlay-close-button');
-    closeButton.setAttribute('icon', 'close');
-
-    wrapper.classList.add('wrapper');
-    surface.classList.add('surface');
-
-    wrapper.appendChild(closeButton);
-    wrapper.appendChild(surface);
-    surface.innerHTML = this.innerHTML;
-    this.innerHTML = '';
-
-    this.appendChild(wrapper);
-
-    handler.addEventListener('click', (event) => {
-      this.toggle();
-    }, { passive: true });
-    closeButton.addEventListener('click', () => {
-      if (this.classList.contains('fade-open')) {
-        trap.pause();
-        this.classList.remove('fade-open');
-        this.classList.add('fade-close');
-        console.log(trap);
-        handler.focus();
-        handler.querySelector('button').focus();
-      }
-    }, { passive: true });
-
-    window.addEventListener('pointerdown', (event) => {
-      if (!this.contains(event.target) && event.target !== handler && !handler.contains(event.target)) {
-        if (this.classList.contains('fade-open')) {
-          trap.pause();
-          this.classList.remove('fade-open');
-          this.classList.add('fade-close');
-        }
-      }
-    });
-
-  }
-
-  toggle() {
-    if (this.classList.contains('fade-open')) {
-      this.classList.remove('fade-open');
-      this.classList.add('fade-close');
-    } else {
-      this.classList.remove('fade-close');
-      this.classList.add('fade-open');
-      this.closeButton.querySelector('button').focus();
-      this.addEventListener('animationend', () => {
-        this.closeButton.querySelector('button').focus();
-        if (this.trap.paused) {
-          this.trap.unpause();
-        } else {
-          this.trap.activate({ allowOutsideClick: true });
-        }
-      }, { once: true });
-    }
-  }
-
-  static {
-    customElements.define(this.name, this);
-  }
-}
-class CAccordian extends HTMLElement {
-  static name = 'c-accordian';
-
-  constructor() {
-    super();
-  }
-
-  connectedCallback() {
-    const head = document.createElement('c-button');
-    const content = document.createElement('div');
-
-    head.classList.add('head')
-    head.innerText = this.getAttribute('label');
-    head.setAttribute('icon', 'expand_circle_down');
-    head.setAttribute('trailing-icon', '');
-
-    if (!this.getAttribute('aria-expanded')) {
-      this.setAttribute('aria-expanded', 'false');
-    }
-
-    content.classList.add('content')
-    content.innerHTML = this.innerHTML;
-    this.innerHTML = '';
-
-    this.appendChild(head);
-    this.appendChild(content);
-  }
-
-  static {
-    customElements.define(this.name, this);
-  }
-}
-class CButton extends HTMLElement {
-  constructor() {
-    super();
-  }
-
-  static name = 'c-button';
-
-  static get observedAttributes() {
-    return ['disabled', 'icon'];
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (!this.button || !this.icon) return;
-
-    if (name === 'disabled') {
-      if (newValue !== null) {
-        this.button.disabled = true;
-      } else {
-        this.button.disabled = false;
-      }
-    }
-
-    if (name === 'icon') {
-      if (oldValue !== newValue) {
-        this.icon.innerText = newValue;
-      }
-    }
-  }
-
-  connectedCallback() {
-    const button = document.createElement('button');
-    const icon = document.createElement('span');
-    const content = document.createElement('span');
-
-    this.button = button;
-    this.icon = icon;
-
-    icon.classList.add('icon');
-    content.classList.add('content');
-
-    const currentHTML = this.innerHTML;
-    content.innerHTML = currentHTML;
-
-    if (this.innerHTML) {
-      this.innerHTML = '';
-      button.appendChild(content);
-      if (!this.hasAttribute('variant')) {
-        this.setAttribute('variant', 'text');
-      }
-    } else if (this.hasAttribute('icon')) {
-      this.setAttribute('variant', 'icon');
-    }
-
-    if (this.hasAttribute('icon')) {
-      if (this.hasAttribute('trailing-icon')) {
-        button.appendChild(icon);
-      } else {
-        button.prepend(icon);
-      }
-    }
-
-    if (this.hasAttribute('disabled')) {
-      button.disabled = true;
-    }
-
-    icon.innerText = this.getAttribute('icon');
-    this.appendChild(button);
-
-    button.addEventListener('pointerenter', () => {
-      if (!button.disabled) {
-        const _class = 'hovered';
-        this.classList.add(_class);
-
-        button.addEventListener('pointerleave', () => this.classList.remove(_class), { once: true });
-      }
-    }, { passive: true });
-
-    button.addEventListener('pointerdown', () => {
-      if (!button.disabled) {
-        const _class = 'pressed';
-        this.classList.add(_class);
-
-        window.addEventListener('pointerup', () => this.classList.remove(_class), { once: true });
-        button.addEventListener('pointerleave', () => this.classList.remove(_class), { once: true });
-      }
-    }, { passive: true });
-
-    button.addEventListener('touchstart', () => {
-      if (!button.disabled) {
-        button.classList.add('touched');
-
-        button.addEventListener('focusout', () => {
-          button.classList.remove('touched');
-        }, { passive: true, once: true });
-      }
-    }, { passive: true });
-
-    button.addEventListener('keydown', (event) => {
-      const _class = 'pressed';
-      if (event.key === ' ' || event.key === 'Enter') {
-        this.classList.add(_class);
-      } else {
-        return
-      }
-
-      window.addEventListener('keyup', () => this.classList.remove(_class), { once: true });
-    }, { passive: true });
-
-    // connected callback end
-  }
-
-  static {
-    customElements.define(this.name, this);
-  }
-}
+const mediaSmallPhone = 384;
+const mediaPhone = 768;
+
+const body = document.body;
+const appBody = document.querySelector('#app');
+const menuButton = document.querySelector('#menu-button');
+const appNavigationWrapper = document.querySelector('#app-navigation-wrapper');
+const appNavigation = document.querySelector('#app-navigation');
+const backdrop = document.querySelector('#backdrop');
+const themeSelection = document.querySelector('#theme-selection');
+const configDB = indexedDB.open("config");
 
 const app = {
-  theme: {
-    ["Warm Light"]: {
-      "description": "A light theme with warm tones for a cozy and inviting design.",
-      "value": `
-  color-scheme: light;
+  themes: [
+    {
+      name: 'Warm Light',
+      description: 'A light theme with warm tones for a cozy and inviting design.',
+      value: `color-scheme: light;
 
-  /* palette */
-  --primary: hsl(34 40% 92%);
-  --primary-100: hsl(34 36% 96%);
-  --primary-200: hsl(34 32% 90%);
-  --primary-300: hsl(34 28% 84%);
-  --primary-shadow: hsl(34, 30%, 70%, 32%);
-  --primary-opaque: hsl(34 40% 64% / 0.8);
+    /* palette */
+    --primary: hsl(34 40% 92%);
+    --primary-100: hsl(34 36% 96%);
+    --primary-200: hsl(34 32% 90%);
+    --primary-300: hsl(34 28% 84%);
+    --primary-shadow: hsl(34, 30%, 70%, 32%);
+    --primary-opaque: hsl(34 40% 64% / 0.8);
 
-  --secondary: hsl(22 80% 50%);
-  --secondary-100: hsl(22 76% 58%);
-  --secondary-200: hsl(22 72% 64%);
-  --secondary-300: hsl(22 60% 54%);
-  --secondary-shadow: hsl(22 40% 50% / 72%);
+    --secondary: hsl(22 80% 50%);
+    --secondary-100: hsl(22 76% 58%);
+    --secondary-200: hsl(22 72% 64%);
+    --secondary-300: hsl(22 60% 54%);
+    --secondary-shadow: hsl(22 40% 50% / 72%);
 
-  --hovered: hsl(34 36% 96%);
-  --pressed: hsl(34 32% 90%);
+    --hovered: hsl(34 36% 96%);
+    --pressed: hsl(34 32% 90%);
 
-  --tonal: hsl(34 28% 88%);
-  --tonal-hovered: hsl(34, 24%, 82%);
-  --tonal-pressed: hsl(34, 22%, 76%);
-  --tonal-ripple: hsl(22, 76%, 58%);
-  --tonal-shadow: hsl(22, 50%, 60%, 80%);
-  --tonal-outline: hsl(22 100% 54%);
+    --tonal: hsl(34 28% 88%);
+    --tonal-hovered: hsl(34, 24%, 82%);
+    --tonal-pressed: hsl(34, 22%, 76%);
+    --tonal-ripple: hsl(22, 76%, 58%);
+    --tonal-shadow: hsl(22, 50%, 60%, 80%);
+    --tonal-outline: hsl(22 100% 54%);
 
-  --elevated: hsl(34 36% 98%);
-  --elevated-hovered: hsl(34 30% 94%);
-  --elevated-pressed: hsl(34 28% 90%);
-  --elevated-shadow-front: hsl(34, 40%, 80%, 80%);
-  --elevated-shadow-back: hsl(34, 20%, 70%, 30%);
+    --elevated: hsl(34 36% 98%);
+    --elevated-hovered: hsl(34 30% 94%);
+    --elevated-pressed: hsl(34 28% 90%);
+    --elevated-shadow-front: hsl(34, 40%, 80%, 80%);
+    --elevated-shadow-back: hsl(34, 20%, 70%, 30%);
 
-  --accent: hsl(22, 80%, 55%);
+    --accent: hsl(22, 80%, 55%);
 
-  --background: hsl(40 30% 98%);
-  --surface: hsl(34 36% 96%);
-  --overlay-shadow: transparent;
-  --on-surface: hsl(40 20% 92%);
+    --background: hsl(40 30% 98%);
+    --surface: hsl(34 36% 96%);
+    --overlay-shadow: transparent;
+    --on-surface: hsl(40 20% 92%);
 
-  --text: hsl(22 100% 14%);
-  --text-primary: hsl(34, 40%, 20%);
-  --text-tonal: hsl(22 100% 24%);
-  --button-text: hsl(22 100% 24%);
+    --text: hsl(22 100% 14%);
+    --text-primary: hsl(34, 40%, 20%);
+    --text-tonal: hsl(22 100% 24%);
+    --button-text: hsl(22 100% 24%);
 
-  --filled: hsl(22 80% 50%);
-  --filled-color: hsl(40 36% 96%);
-  --filled-hovered: hsl(22 76% 58%);
-  --filled-pressed: hsl(22 72% 64%);
-  --filled-ripple: hsl(22 36% 94% / 1);
-  --filled-shadow: hsl(22 16% 84% / 1);
+    --filled: hsl(22 80% 50%);
+    --filled-color: hsl(40 36% 96%);
+    --filled-hovered: hsl(22 76% 58%);
+    --filled-pressed: hsl(22 72% 64%);
+    --filled-ripple: hsl(22 36% 94% / 1);
+    --filled-shadow: hsl(22 16% 84% / 1);
 
-  --ripple: hsl(22 34% 40% / 1);
-  --button-hover: hsl(22 28% 88% / 1);
+    --ripple: hsl(22 34% 40% / 1);
+    --button-hover: hsl(22 28% 88% / 1);
 
-  --disabled: hsl(34 10% 88% / 0.6);
-  --disabled-text: hsl(34 20% 40% / 0.4);
-  --disabled-outline: hsl(34 10% 60% / 0.25);
-  `
+    --disabled: hsl(34 10% 88% / 0.6);
+    --disabled-text: hsl(34 20% 40% / 0.4);
+    --disabled-outline: hsl(34 10% 60% / 0.25);
+      `
     },
-    ["Warm Dark"]: {
-      "description": "A dark theme with warm tones for a soothing design; welcome to the dark side.",
-      "value": `
+    {
+      name: 'Warm Dark',
+      description: 'A dark theme with warm tones for a soothing design; welcome to the dark side.',
+      value: `
   color-scheme: dark;
 
   /* palette */
@@ -475,9 +115,9 @@ const app = {
   --accent: hsl(16, 80%, 70%);
 
   --background: hsl(22 12% 7%);
-  --surface: hsl(16 10% 8%);
+  --surface: hsl(16 10% 10%);
   --overlay-shadow: transparent;
-  --on-surface: hsl(24 10% 9%);
+  --on-surface: hsl(24 12% 11%);
 
   --text: hsl(22 100% 92%);
   --text-primary: hsl(16, 10%, 85%);
@@ -499,36 +139,41 @@ const app = {
   --disabled-outline: hsl(22 10% 40% / 0.25);
   `
     }
-  },
+  ],
   iconAxeConfig: ':opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200',
-  themeList: function () {
-    return Object.keys(this.theme);
-  },
-  getAllThemes: function () {
-    return this.theme;
-  }
 };
 
-(() => {
-  // theme initializer
-  const storedTheme = localStorage.getItem('theme');
+const lastTheme = localStorage.getItem('lastTheme');
 
-  if (storedTheme) {
-    document.documentElement.setAttribute('data-theme', storedTheme);
-  } else {
-    const prefersDarkmode = window.matchMedia('prefers-color-scheme: dark').matches;
+if (lastTheme) {
+  document.documentElement.setAttribute('data-theme', lastTheme);
+} else {
+  const prefersDarkmode = window.matchMedia('prefers-color-scheme: dark').matches;
 
-    document.documentElement.setAttribute('data-theme', (prefersDarkmode ? 'Warm Dark' : 'Warm Light'));
-  }
+  document.documentElement.setAttribute('data-theme', (prefersDarkmode ? 'Warm Dark' : 'Warm Light'));
+}
 
-  const themeStyles = document.createElement('style');
+const themeStyle = document.createElement('style');
 
-  Object.entries(app.theme).forEach(([themeName, themeObject]) => {
-    themeStyles.innerHTML += `[data-theme="${themeName}"] { ${themeObject.value} }\n`;
+app.themes.forEach((theme) => {
+  themeStyle.innerHTML += `[data-theme="${theme.name}"] { ${theme.value} }\n`;
 
-    document.body.appendChild(themeStyles);
+  document.body.appendChild(themeStyle);
+});
+
+themeSelection.innerHTML = '';
+
+app.themes.forEach((theme) => {
+  let themeButton = document.createElement('c-button');
+  themeButton.innerHTML = theme.name;
+
+  themeSelection.appendChild(themeButton);
+
+  themeButton.addEventListener('click', () => {
+    document.documentElement.setAttribute('data-theme', theme.name);
+    localStorage.setItem('lastTheme', theme.name);
   });
-})();
+})
 
 function toggleFullscreen() {
   if (!document.fullscreenElement) {
@@ -631,38 +276,6 @@ function getTime(time, timeConfig = {}) {
     return formattedDate;
   }
 }
-
-const mediaSmallPhone = 384;
-const mediaPhone = 768;
-
-const body = document.body;
-const appBody = document.querySelector('#app');
-const menuButton = document.querySelector('#menu-button');
-const appNavigationWrapper = document.querySelector('#app-navigation-wrapper');
-const appNavigation = document.querySelector('#app-navigation');
-const backdrop = document.querySelector('#backdrop');
-const themeSelection = document.querySelector('#theme-selection');
-
-themeSelection.innerHTML = '';
-
-
-const configDB = indexedDB.open("config");
-
-(async () => {
-  for (const item of app.themeList()) {
-    const theme = document.createElement('c-button');
-    theme.innerHTML = item;
-
-    themeSelection.appendChild(theme);
-
-    theme.addEventListener('click', () => {
-      document.documentElement.setAttribute('data-theme', item);
-      localStorage.setItem('theme', item);
-    });
-
-    await new Promise(resolve => setTimeout(resolve, 0));
-  }
-})();
 
 document.addEventListener('DOMContentLoaded', () => {
   const hamburgerMenu = document.querySelector('#menu-button .icon');

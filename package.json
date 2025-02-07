@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "puppeteer": "^24.2.0",
+    "sass": "^1.84.0"
+  }
+}
