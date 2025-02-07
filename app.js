@@ -376,65 +376,65 @@ class CButton extends HTMLElement {
 const app = {
   theme: {
     ["Warm Light"]: {
-      "description": "A light theme with warm colors to create a visually appealing design; embrace the light.",
+      "description": "A light theme with warm tones for a cozy and inviting design.",
       "value": `
   color-scheme: light;
 
   /* palette */
-  --primary: hsl(39, 64%, 64%);
-  --primary-100: hsl(39, 50%, 90%);
-  --primary-200: hsl(39, 60%, 85%);
-  --primary-300: hsl(39, 60%, 70%);
-  --primary-shadow: hsl(40, 32%, 38%, 32%);
-  --primary-opaque: hsl(39, 70%, 74% / 0.8);
+  --primary: hsl(34 40% 92%);
+  --primary-100: hsl(34 36% 96%);
+  --primary-200: hsl(34 32% 90%);
+  --primary-300: hsl(34 28% 84%);
+  --primary-shadow: hsl(34, 30%, 70%, 32%);
+  --primary-opaque: hsl(34 40% 64% / 0.8);
 
-  --secondary: hsl(40, 80%, 23%);
-  --secondary-100: hsl(40, 80%, 26%);
-  --secondary-200: hsl(40, 60%, 32%);
-  --secondary-300: hsl(40, 45%, 38%);
-  --secondary-shadow: hsl(40, 45%, 38%, 32%);
+  --secondary: hsl(22 80% 50%);
+  --secondary-100: hsl(22 76% 58%);
+  --secondary-200: hsl(22 72% 64%);
+  --secondary-300: hsl(22 60% 54%);
+  --secondary-shadow: hsl(22 40% 50% / 72%);
 
-  --hovered: hsl(43 56% 86%);
-  --pressed: hsl(40, 66%, 74%);
+  --hovered: hsl(34 36% 96%);
+  --pressed: hsl(34 32% 90%);
 
-  --tonal: hsl(33, 90%, 74%);
-  --tonal-hovered: hsl(33, 90%, 70%);
-  --tonal-pressed: hsl(33, 90%, 65%);
-  --tonal-ripple: hsl(33, 60%, 70%);
-  --tonal-shadow: hsl(33, 32%, 30%, 80%);
-  --tonal-outline: hsl(33, 80%, 74%);
+  --tonal: hsl(34 28% 88%);
+  --tonal-hovered: hsl(34, 24%, 82%);
+  --tonal-pressed: hsl(34, 22%, 76%);
+  --tonal-ripple: hsl(22, 76%, 58%);
+  --tonal-shadow: hsl(22, 50%, 60%, 80%);
+  --tonal-outline: hsl(22 100% 54%);
 
-  --elevated: hsl(40, 80%, 88%);
-  --elevated-hovered: hsl(40, 60%, 80%);
-  --elevated-pressed: hsl(40, 50%, 76%);
-  --elevated-shadow-front: hsl(40, 32%, 40%, 80%);
-  --elevated-shadow-back: hsl(40, 32%, 40%, 30%);
+  --elevated: hsl(34 36% 98%);
+  --elevated-hovered: hsl(34 30% 94%);
+  --elevated-pressed: hsl(34 28% 90%);
+  --elevated-shadow-front: hsl(34, 40%, 80%, 80%);
+  --elevated-shadow-back: hsl(34, 20%, 70%, 30%);
 
-  --accent: hsl(15, 31%, 52%);
+  --accent: hsl(22, 80%, 55%);
 
-  --background: hsl(40, 80%, 98%);
-  --surface: hsl(43, 44%, 94%);
-  --overlay-shadow: hsl(16 12% 20% / 0.6);
-  --on-surface: hsl(44, 34%, 92%);
+  --background: hsl(40 30% 98%);
+  --surface: hsl(34 36% 96%);
+  --overlay-shadow: transparent;
+  --on-surface: hsl(40 20% 92%);
 
-  --text: hsl(37, 8%, 20%);
-  --text-primary: hsl(38, 25%, 36%);
-  --text-tonal: hsl(38, 35%, 40%);
-  --button-text: hsl(38, 9%, 36%);
+  --text: hsl(22 100% 14%);
+  --text-primary: hsl(34, 40%, 20%);
+  --text-tonal: hsl(22 100% 24%);
+  --button-text: hsl(22 100% 24%);
 
-  --filled: hsl(33 60% 50%);
-  --filled-color: hsl(40, 60%, 88%);
-  --filled-hovered: hsl(33 68% 54%);
-  --filled-pressed: hsl(33 72% 60%);
-  --filled-ripple: hsl(33, 60%, 70%);
-  --filled-shadow: hsl(33, 32%, 30%);
+  --filled: hsl(22 80% 50%);
+  --filled-color: hsl(40 36% 96%);
+  --filled-hovered: hsl(22 76% 58%);
+  --filled-pressed: hsl(22 72% 64%);
+  --filled-ripple: hsl(22 36% 94% / 1);
+  --filled-shadow: hsl(22 16% 84% / 1);
 
-  --ripple: hsl(33, 80%, 74%);
-  --button-hover: hsl(40, 70%, 90%);
+  --ripple: hsl(22 34% 40% / 1);
+  --button-hover: hsl(22 28% 88% / 1);
 
-  --disabled: hsl(32, 34%, 68% / 0.8);
-  --disabled-text: hsl(32, 20%, 60% / 0.6);
-  --disabled-outline: hsl(32, 20%, 40% / 0.4);
+  --disabled: hsl(34 10% 88% / 0.6);
+  --disabled-text: hsl(34 20% 40% / 0.4);
+  --disabled-outline: hsl(34 10% 60% / 0.25);
   `
     },
     ["Warm Dark"]: {
@@ -474,10 +474,10 @@ const app = {
 
   --accent: hsl(16, 80%, 70%);
 
-  --background: hsl(22 14% 7%);
-  --surface: hsl(16 12% 10%);
+  --background: hsl(22 12% 7%);
+  --surface: hsl(16 10% 8%);
   --overlay-shadow: transparent;
-  --on-surface: hsl(22 10% 14%);
+  --on-surface: hsl(24 10% 9%);
 
   --text: hsl(22 100% 92%);
   --text-primary: hsl(16, 10%, 85%);

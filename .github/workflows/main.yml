@@ -1,0 +1,36 @@
+name: Deploy with Puppeteer
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    tags:
+      - "*"
+  release:
+    types:
+      - published
+
+jobs:
+  run-puppeteer:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Process index.html
+        run: node filo.js index.html
+
+      - name: Run Puppeteer script
+        env:
+          APP_LOCATION: ${{ secrets.APP_LOCATION }}
+        run: node puppeteer-deploy.js
