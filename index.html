@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Chat Modern</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div id="app" role="application" aria-label="App Container">
+    <div id="app-drawer" aria-labelledby="menu-button">
+      <c-button id="menu-button" icon="menu" aria-label="Open Menu"></c-button>
+    </div>
+    <div id="app-navigation-wrapper" class="app-menu-wrapper" role="navigation" aria-label="Primary Navigation"
+      aria-labelledby="menu-button">
+      <div class="app-menu">
+        <nav id="app-navigation">
+          <h3>Navigation</h3>
+          <hr>
+          <section>
+
+          </section>
+        </nav>
+      </div>
+    </div>
+    <div id="app-interface">
+      <header class="app-bar" role="banner" aria-label="Application Bar">
+        <c-button id="settings-button" icon="settings" aria-label="Open Settings"></c-button>
+      </header>
+
+      <div class="main-wrapper">
+        <main aria-labelledby="main-content">
+
+        </main>
+      </div>
+    </div>
+  </div>
+  <div id="backdrop" role="presentation" aria-hidden="true"></div>
+
+  <c-overlay id="settings" variant="context-menu" for="settings-button" priority="primary" role="dialog"
+    aria-labelledby="settings-button" aria-modal="true">
+    <div class="flex-column" id="theme-selection">Please wait, the themes are loading.</div>
+  </c-overlay>
+
+  <!-- scripts -->
+  <script src="https://unpkg.com/tabbable/dist/index.umd.js"></script>
+  <script src="https://unpkg.com/focus-trap/dist/focus-trap.umd.js"></script>
+  <script src="app.js"></script>
+  <script src="script.js"></script>
+  <style>
+    /*${filo:app.css}*/
+    /*${filo:style.css}*/
+  </style>
+  <script>
+    //${filo:app.js}
+    // ${filo:script.js}
+  </script>
+</body>
+
+</html>
