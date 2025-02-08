@@ -143,11 +143,11 @@ class CRippleElement extends HTMLElement {
   }
 }
 class COverlayElement extends HTMLElement {
+  static elementName = 'c-overlay';
   constructor() {
     super();
   }
 
-  static name = 'c-overlay';
 
   static get observedAttributes() {
     return ['for'];
@@ -218,11 +218,8 @@ class COverlayElement extends HTMLElement {
       }, { once: true });
     }
   }
-
-  static {
-    customElements.define(this.name, this);
-  }
 }
+customElements.define(COverlayElement.elementName, COverlayElement);
 class CAccordianElement extends HTMLElement {
   static name = 'c-accordian';
 
@@ -370,7 +367,6 @@ class CButtonElement extends HTMLElement {
     customElements.define(this.name, this);
   }
 }
-
 class TabsElement extends HTMLInputElement {
   static elementName = 'c-tab';
   constructor() {

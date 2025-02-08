@@ -21,13 +21,15 @@
           <h3>Navigation</h3>
           <hr>
           <section id="navigation-tabs" class="tabs-container">
-            <label for="main-tab">
-              <input is="c-tab" id="main-tab" name="main-tabs" value="main" checked>
-              Main
+            <label for="tab-ai-chat">
+              <input is="c-tab" id="tab-ai-chat" name="main-tabs" value="ai-chat" checked>
+              <span class="icon">auto_awesome</span>
+              <span class="name">AI Chat</span>
             </label>
-            <label for="primary-tab">
-              <input is="c-tab" id="primary-tab" name="main-tabs" value="primary">
-              Primary
+            <label for="tab-public-chat">
+              <input is="c-tab" id="tab-public-chat" name="main-tabs" value="public-chat">
+              <span class="icon">forum</span>
+              <span class="name">Public Chat</span>
             </label>
           </section>
         </nav>
@@ -40,8 +42,8 @@
 
       <div class="main-wrapper">
         <main aria-labelledby="main-content">
-          <div id="main">Main</div>
-          <div id="primary">Primary</div>
+          <div id="ai-chat">Main</div>
+          <div id="public-chat">Primary</div>
         </main>
       </div>
     </div>

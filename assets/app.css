@@ -847,12 +847,18 @@
     height: 0;
     width: 0;
     margin: 0;
+    position: absolute;
   }
 
   label:has(input[is=c-tab]) {
     background: transparent;
     border-radius: var(--space-S);
     padding: 6px;
+    display: flex;
+    .name {
+      flex: 10;
+      margin-inline: 4px;
+    }
   }
 
   @media (hover: hover) {

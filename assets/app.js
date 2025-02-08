@@ -153,11 +153,10 @@ if (lastTheme) {
 }
 
 const themeStyle = document.createElement('style');
+document.documentElement.appendChild(themeStyle);
 
 app.themes.forEach((theme) => {
   themeStyle.innerHTML += `[data-theme="${theme.name}"] { ${theme.value} }\n`;
-
-  document.body.appendChild(themeStyle);
 });
 
 themeSelection.innerHTML = '';
@@ -280,6 +279,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const hamburgerMenu = document.querySelector('#menu-button .icon');
   if (Math.random() <= 0.01) {
     hamburgerMenu.innerText = '🍔';
+    hamburgerMenu.classList.remove('icon');
     hamburgerMenu.style.paddingBottom = '8px';
   }
 })
