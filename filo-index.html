@@ -1,0 +1,2199 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Chat Modern</title>
+  <link rel="stylesheet" href="./assets/app.css">
+  <link rel="stylesheet" href="./assets/style.css">
+</head>
+
+<body>
+  <div id="app" role="application" aria-label="App Container">
+    <div id="app-drawer" aria-labelledby="menu-button">
+      <c-button id="menu-button" icon="menu" aria-label="Open Menu"></c-button>
+    </div>
+    <div id="app-navigation-wrapper" class="app-menu-wrapper" role="navigation" aria-label="Primary Navigation"
+      aria-labelledby="menu-button">
+      <div class="app-menu">
+        <nav id="app-navigation">
+          <h3>Navigation</h3>
+          <hr>
+          <section id="navigation-tabs" class="tabs-container">
+            <label for="main-tab">
+              <input is="c-tab" id="main-tab" name="main-tabs" value="main" checked>
+              Main
+            </label>
+            <label for="primary-tab">
+              <input is="c-tab" id="primary-tab" name="main-tabs" value="primary">
+              Primary
+            </label>
+          </section>
+        </nav>
+      </div>
+    </div>
+    <div id="app-interface">
+      <header class="app-bar" role="banner" aria-label="Application Bar">
+        <c-button id="settings-button" icon="settings" aria-label="Open Settings"></c-button>
+      </header>
+
+      <div class="main-wrapper">
+        <main aria-labelledby="main-content">
+          <div id="main">Main</div>
+          <div id="primary">Primary</div>
+        </main>
+      </div>
+    </div>
+  </div>
+  <div id="backdrop" role="presentation" aria-hidden="true"></div>
+
+  <c-overlay id="settings" variant="context-menu" for="settings-button" priority="primary" role="dialog"
+    aria-labelledby="settings-button" aria-modal="true">
+    <div class="flex-column" id="theme-selection">Please wait, the themes are loading.</div>
+  </c-overlay>
+
+  <!-- scripts -->
+  <script src="https://unpkg.com/tabbable/dist/index.umd.js"></script>
+  <script src="https://unpkg.com/focus-trap/dist/focus-trap.umd.js"></script>
+  <script src="./assets/component.js"></script>
+  <script src="./assets/app.js"></script>
+  <script src="./assets/script.js"></script>
+  <!-- styles -->
+  <style>
+    /* Files inlined by Filo during GitHub workflow */
+    @import url("https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap");
+
+    .icon {
+      font-family: 'Material Symbols Rounded';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 24px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-smoothing: antialiased;
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+
+
+    @media only screen and (min-width: 576px) {
+      ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+      }
+    }
+
+    @media only screen and (max-width: 576px) {
+      ::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+      }
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background-color: var(--primary-100);
+      border-radius: 10px;
+      cursor: grab;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-200);
+    }
+
+    ::-webkit-scrollbar-thumb:active {
+      background: var(--primary-300);
+      cursor: grabbing;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-corner {
+      background: transparent;
+    }
+
+    :root {
+      user-select: none;
+      font-family: 'Work Sans', Arial, system;
+      font-size: 18px;
+      background: black;
+      color: var(--text);
+
+      /* Global gransition variable */
+      --default-layout-transition: width 0.2s, height 0.2s, left 0.2s, right 0.2s, top 0.2s, bottom 0.2s;
+
+      /* Variables */
+      --media-phone: 576px;
+
+      --z-backdrop: 500;
+      --z-dropdown: 1000;
+      --z-overlay: 2000;
+      --z-modal: 3000;
+      --z-tooltip: 4000;
+      --z-popup: 5000;
+      --z-highest: 99999;
+      --space-S: 0.45rem;
+      --space-B: 0.75rem;
+      --space-M: 1.25rem;
+      --space-L: 2.5rem;
+      --seconds-S: 105ms;
+      --seconds-M: 1.25s;
+      --seconds-L: 2.2s;
+      --shadow-subtle: 0 0 20px hsl(0, 0.00%, 0%, 0.07);
+      --shadow-S: 0 0 8px;
+      --cubic-bezier-subtle-flow: cubic-bezier(0.2, 0.9, 0.65, 0.65);
+      --width-small: 320px;
+      --width-ample: 448px;
+      --width-medium: 640px;
+      --width-large: 960px;
+      --width-xlarge: 1216px;
+    }
+
+    :root,
+    html,
+    body {
+      margin: 0;
+      height: 100%;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      text-align: left;
+    }
+
+    body {
+      background: var(--background);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      color: inherit;
+      font-size: inherit;
+    }
+
+    :focus-visible {
+      outline: none;
+    }
+
+    ::selection {
+      background: var(--primary);
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p {
+      margin-block: 0.8rem;
+      user-select: text;
+    }
+
+    h1 {
+      font-size: 3.6rem;
+    }
+
+    h2 {
+      font-size: 2.4rem;
+    }
+
+    h3 {
+      font-size: 1.8rem;
+    }
+
+    h4 {
+      font-size: 1.4rem;
+    }
+
+    h5 {
+      font-size: 1.2rem;
+    }
+
+    h6 {
+      font-size: 1rem;
+    }
+
+    p {
+      font-size: 1rem;
+    }
+
+    small {
+      font-size: 0.833rem;
+    }
+
+    .very-small {
+      font-size: 0.64rem;
+    }
+
+    label {
+      cursor: pointer;
+    }
+
+    button,
+    input,
+    textarea {
+      font-family: inherit;
+      font-size: inherit;
+      border: none;
+      outline: none;
+      background: none;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button[disabled] {
+      cursor: default;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 0.5rem;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    blockquote {
+      margin: 1rem 0;
+      padding: 0.8rem;
+      border-left: 4px solid #ccc;
+      font-style: italic;
+    }
+
+    code {
+      font-family: monospace;
+      font-size: 0.875rem;
+      background-color: #f4f4f4;
+      padding: 0.2rem 0.4rem;
+      border-radius: 3px;
+    }
+
+    hr {
+      border: 0;
+      border-top: 2px solid var(--text-tonal);
+    }
+
+    fieldset {
+      border: 1px solid #ccc;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+
+    legend {
+      font-weight: bold;
+    }
+
+    button {
+      all: unset;
+      box-sizing: border-box;
+      padding: var(--space-S);
+      align-items: center;
+      justify-content: center;
+      border-radius: 9999px;
+      border: 1px solid transparent;
+      background: transparent;
+      cursor: pointer;
+      overflow: hidden;
+      display: inline-flex;
+    }
+
+    button:focus-visible {
+      outline: var(--primary-opaque);
+    }
+
+    .pane {
+      border-radius: var(--space-M);
+      padding: var(--space-S);
+    }
+
+    .pane[variant=primary] {
+      background: var(--surface);
+      box-shadow: 0 0 var(--space-S) var(--primary-shadow);
+    }
+
+    #backdrop {
+      opacity: 0;
+      visibility: hidden;
+      z-index: var(--z-backdrop);
+      background: hsl(0 0% 0% / 70%);
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      transition-property: option, visibility;
+      transition-duration: 280ms;
+      transition-timing-function: cubic-bezier(.4, .8, 0.5, 1);
+    }
+
+    #backdrop.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .fade-close {
+      animation: fade-close var(--seconds-S) var(--cubic-bezier-subtle-flow) forwards;
+    }
+
+    .fade-open {
+      animation: fade-open var(--seconds-S) var(--cubic-bezier-subtle-flow) forwards;
+    }
+
+
+    @keyframes ripple-animation {
+      to {
+        transform: scale(4);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fade-close {
+      from {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      to {
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
+
+    @keyframes fade-open {
+      from {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      to {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+
+    @keyframes scale-fade-close {
+      from {
+        opacity: 1;
+        visibility: visible;
+        scale: 1;
+      }
+
+      to {
+        opacity: 0;
+        visibility: hidden;
+        scale: 0.995;
+      }
+    }
+
+    @keyframes scale-fade-open {
+      from {
+        opacity: 0;
+        visibility: hidden;
+        scale: 0.975;
+      }
+
+      to {
+        opacity: 1;
+        visibility: visible;
+        scale: 1;
+      }
+    }
+
+    input {
+      border: none;
+    }
+
+    input[type=radio] {
+      border-radius: var();
+    }
+
+    input[type=radio]:focus-visible {
+      outline: 2px solid var(--primary-opaque);
+    }
+
+    /* --- */
+
+    /* main.css */
+    :root {
+      overflow: hidden;
+    }
+
+    #app {
+      height: 100%;
+      width: 100%;
+      display: flex;
+    }
+
+    #app-drawer {
+      display: flex;
+      position: fixed;
+      align-items: center;
+      gap: 8px;
+      left: 0;
+      top: 0;
+      padding-left: var(--space-S);
+      padding-top: var(--space-S);
+      z-index: var(--z-overlay);
+    }
+
+    #app #app-navigation-wrapper {
+      width: var(--width-small);
+      background: var(--surface);
+      overflow: hidden;
+      transition: width 300ms cubic-bezier(.4, .8, 0, 1);
+      flex-shrink: 0;
+      display: flex;
+    }
+
+    .app-menu-wrapper .app-menu {
+      width: var(--width-small);
+      padding-top: 64px;
+      display: flex;
+    }
+
+    #app #app-navigation {
+      padding: var(--space-S);
+      flex: 1;
+      overflow: auto;
+    }
+
+    .tabs-container {
+      display: flex;
+      flex-direction: column;
+      gap: calc(var(--space-S) / 2);
+    }
+
+    .tabs-container * {
+      flex: 1;
+    }
+
+    #app #app-interface {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    #app-interface header {
+      padding: var(--space-S);
+      padding-bottom: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: end;
+      gap: 8px;
+    }
+
+    #app-interface .main-wrapper {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    main {
+      display: block;
+      padding: var(--space-S);
+      flex: 1;
+      width: 100%;
+      gap: 0.5rem;
+      overflow-y: auto;
+    }
+
+    @media only screen and (min-width: 768px) {
+      #settings {
+        top: 62px;
+        right: var(--space-S);
+      }
+
+      @keyframes app-navigation-close {
+        from {
+          display: block;
+          width: var(--width-small);
+        }
+
+        to {
+          width: 0;
+          display: flex;
+        }
+      }
+
+      @keyframes app-navigation-open {
+        from {
+          display: none;
+          width: 0;
+        }
+
+        to {
+          display: flex;
+          width: var(--width-small);
+        }
+      }
+
+      #app.close-app-navigation #app-navigation-wrapper {
+        animation: app-navigation-close 200ms cubic-bezier(.4, .8, 0, 1) forwards;
+      }
+
+      #app.open-app-navigation #app-navigation-wrapper {
+        animation: app-navigation-open 200ms cubic-bezier(.4, .8, 0, 1) forwards;
+      }
+    }
+
+    @media (max-width: 768px) {
+      #settings {
+        top: 0;
+      }
+
+      @keyframes app-navigation-show {
+        from {
+          opacity: 0;
+          transform: translateX(-100%);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes app-navigation-close {
+        from {
+          opacity: 1;
+          transform: translateX(0);
+        }
+
+        to {
+          opacity: 0;
+          transform: translateX(-100%);
+        }
+      }
+
+      #app #app-navigation-wrapper {
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        transform: translateX(-100%);
+        transition: opacity 280ms, transform 280ms;
+        z-index: 1999;
+      }
+
+      #app.close-app-navigation #app-navigation-wrapper {
+        animation: app-navigation-close 280ms cubic-bezier(.4, .8, 0, 1) forwards;
+      }
+
+      #app.open-app-navigation #app-navigation-wrapper {
+        animation: app-navigation-show 280ms cubic-bezier(.4, .8, 0, 1) forwards;
+      }
+    }
+
+    #theme-selection {
+      gap: 4px;
+    }
+
+    #theme-selection c-button:not(.hovered):not(.pressed) {
+      background: var(--background);
+    }
+
+    #theme-selection c-button {
+      --radii: 1.6rem;
+    }
+
+    #theme-selection c-button button {
+      min-height: 54px;
+    }
+
+    #theme-selection c-button button {
+      outline-offset: 0;
+    }
+
+    #theme-selection c-button:not(:first-child):not(:last-child) {
+      border-radius: 6px;
+    }
+
+    #theme-selection c-button:first-child {
+      border-radius: var(--radii) var(--radii) 6px 6px;
+    }
+
+    #theme-selection c-button:last-child {
+      border-radius: 6px 6px var(--radii) var(--radii);
+    }
+
+    /* --- */
+
+    /* Components */
+    c-button {
+      color: var(--button-text);
+      display: inline-flex;
+      border-radius: 9999px;
+      justify-content: center;
+      position: relative;
+      align-items: center;
+      cursor: pointer;
+      transition: box-shadow 0.34s ease-in-out;
+      min-width: 44px;
+      min-height: 44px;
+    }
+
+    c-button>button {
+      overflow: hidden;
+      display: flex;
+      position: relative;
+      align-items: center;
+      padding: 10px 18px;
+      gap: 8px;
+      outline: none;
+      border-radius: inherit;
+      flex: 1;
+    }
+
+    c-button button:focus-visible {
+      animation: outline-grow, outline-shrink;
+      animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+      outline: solid var(--primary-opaque);
+    }
+
+    c-button .icon,
+    c-button .content {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    c-button .icon {
+      display: inline-flex;
+      position: relative;
+      writing-mode: horizontal-tb;
+      flex-shrink: 0;
+    }
+
+    c-button .content {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      flex-grow: 1;
+    }
+
+    c-button[variant="icon"] button {
+      height: 44px;
+      width: 44px;
+      padding: 10px;
+    }
+
+    c-button[variant="outlined"]::before {
+      content: '';
+      inset: 0;
+      position: absolute;
+      border: 1px solid var(--tonal-outline, gray);
+      box-sizing: border-box;
+      border-radius: inherit;
+    }
+
+    c-button[variant="icon"],
+    c-button[variant="text"],
+    c-button[variant="outlined"] {
+      --button-hovered: var(--hovered);
+      --button-pressed: var(--pressed);
+    }
+
+    c-button[variant="tonal"] {
+      --button-hovered: var(--tonal-hovered);
+      --button-pressed: var(--tonal-pressed);
+      --ripple: var(--tonal-ripple);
+      background: var(--tonal);
+    }
+
+    c-button[variant="filled"] {
+      --button-hovered: var(--filled-hovered);
+      --button-pressed: var(--filled-pressed);
+      --ripple: var(--filled-ripple);
+      background: var(--filled);
+    }
+
+    c-button[variant="filled"] {
+      color: var(--filled-color);
+    }
+
+    c-button[variant="elevated"] {
+      --button-hovered: var(--elevated-hovered);
+      --button-pressed: var(--elevated-pressed);
+      background: var(--elevated);
+      box-shadow: 0 3px 4px var(--elevated-shadow-front);
+    }
+
+    c-button.hovered {
+      background: var(--button-hovered);
+    }
+
+    c-button.pressed {
+      background: var(--button-pressed);
+    }
+
+    c-button[variant="tonal"].hovered {
+      box-shadow: 0 2px 3px var(--tonal-shadow, gray);
+    }
+
+    c-button[variant="tonal"].pressed {
+      box-shadow: 0 0 transparent;
+    }
+
+    c-button[variant="filled"].hovered {
+      box-shadow: 0 2px 4px var(--filled-shadow, gray);
+    }
+
+    c-button[variant="filled"].pressed {
+      box-shadow: 0 0 transparent;
+    }
+
+    c-button[variant="elevated"].hovered {
+      box-shadow: 0 3px 8px var(--elevated-shadow-front), 0 4px 4px var(--elevated-shadow-back);
+    }
+
+    c-button[variant="elevated"].pressed {
+      box-shadow: 0 2px 6px var(--elevated-shadow-front);
+    }
+
+    c-button[disabled] {
+      background: transparent;
+      box-shadow: none !important;
+      color: var(--disabled-text) !important;
+    }
+
+    c-button[disabled]:not([variant=icon]):not([variant=text]):not([variant=outlined]) {
+      background: var(--disabled);
+    }
+
+    c-button[disabled][variant=outlined]::before {
+      border-color: var(--disabled-outline);
+    }
+
+    c-overlay {
+      position: fixed;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      z-index: var(--z-overlay);
+      opacity: 0;
+      visibility: hidden;
+      display: flex;
+      flex-direction: column;
+      background-color: hsl(0 0 0 / 0.25);
+      max-width: var(--width-ample);
+      max-height: 64vh;
+      min-height: 232px;
+      height: 100%;
+      box-shadow: var(--shadow-S) var(--overlay-shadow);
+      border-radius: var(--space-B);
+      background-color: var(--on-surface);
+    }
+
+    c-overlay .wrapper {
+      flex: 1;
+      position: absolute;
+      overflow: hidden;
+      width: 100%;
+      height: 100%;
+    }
+
+    c-overlay .overlay-close-button {
+      position: absolute;
+      z-index: 1;
+      top: 8px;
+      right: 8px;
+    }
+
+    c-overlay .wrapper .surface {
+      padding: 8px;
+      padding-top: 52px;
+      max-width: 100%;
+      max-height: 100%;
+      overflow: auto;
+    }
+
+    @media only screen and (max-width: 768px) {
+      c-overlay[priority=primary] {
+        max-height: unset;
+        min-height: unset;
+        height: 100%;
+        width: 100%;
+        max-width: unset;
+        min-width: unset;
+        border-radius: 0;
+      }
+    }
+
+    c-accordian {
+      display: flex;
+      flex-direction: column;
+
+    }
+
+    c-accordian .head {
+      min-height: 54px;
+    }
+
+    dialog {
+      user-select: inherit;
+      overflow: hidden;
+      border: none;
+      border-radius: 26px;
+      padding: var(--space-B);
+      background: var(--surface);
+      height: clamp(140px, 240px, 62%);
+      width: clamp(240px, 380px, 86%);
+
+      .head {
+        display: flex;
+        padding: 0.4rem;
+
+        .title {
+          flex: 1;
+          text-align: center;
+          margin: 0.6rem 0 0 0;
+        }
+
+        c-button {
+          width: 44px;
+          height: 44px;
+        }
+      }
+    }
+
+    dialog::backdrop {
+      background: hsl(0 0% 0% / 80%);
+      backdrop-filter: blur(8px);
+    }
+
+    dialog[variant=content-action][open] {
+      display: flex;
+      flex-direction: column;
+    }
+
+    dialog[variant=content-action] {
+      padding: 0;
+
+      .content {
+        padding: var(--space-B);
+        flex: 1;
+      }
+
+      .action {
+        padding: var(--space-S);
+        gap: var(--space-S);
+
+        c-button button {
+          padding: 0;
+        }
+      }
+    }
+
+    input[is=c-tab] {
+      opacity: 0;
+      height: 0;
+      width: 0;
+      margin: 0;
+    }
+
+    label:has(input[is=c-tab]) {
+      background: transparent;
+      border-radius: var(--space-S);
+      padding: 6px;
+    }
+
+    @media (hover: hover) {
+      label:has(input[is=c-tab]):hover {
+        background: var(--primary-200);
+      }
+    }
+
+    label:has(input[is=c-tab]):active {
+      background: var(--primary-300);
+    }
+
+    label:has(input[is=c-tab]:focus-visible) {
+      outline: 2px solid var(--primary-opaque);
+    }
+
+    label:has(input[is=c-tab]:checked) {
+      background: var(--primary-100);
+    }
+
+    /* Utility Classes */
+
+    /* Spacing Utilities */
+    .m-0 {
+      margin: 0;
+    }
+
+    .mt-0 {
+      margin-top: 0;
+    }
+
+    .mb-0 {
+      margin-bottom: 0;
+    }
+
+    .ml-0 {
+      margin-left: 0;
+    }
+
+    .mr-0 {
+      margin-right: 0;
+    }
+
+    .p-0 {
+      padding: 0;
+    }
+
+    .pt-0 {
+      padding-top: 0;
+    }
+
+    .pb-0 {
+      padding-bottom: 0;
+    }
+
+    .pl-0 {
+      padding-left: 0;
+    }
+
+    .pr-0 {
+      padding-right: 0;
+    }
+
+    .m-1 {
+      margin: 0.25rem;
+    }
+
+    .mb-1 {
+      margin-block: 0.25rem;
+    }
+
+    .mi-1 {
+      margin-inline: 0.25rem;
+    }
+
+    .mt-1 {
+      margin-top: 0.25rem;
+    }
+
+    .mb-1 {
+      margin-bottom: 0.25rem;
+    }
+
+    .ml-1 {
+      margin-left: 0.25rem;
+    }
+
+    .mr-1 {
+      margin-right: 0.25rem;
+    }
+
+    .p-1 {
+      padding: 0.25rem;
+    }
+
+    .pt-1 {
+      padding-top: 0.25rem;
+    }
+
+    .pb-1 {
+      padding-bottom: 0.25rem;
+    }
+
+    .pl-1 {
+      padding-left: 0.25rem;
+    }
+
+    .pr-1 {
+      padding-right: 0.25rem;
+    }
+
+    /* Text Alignment */
+    .text-left {
+      text-align: left;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .text-right {
+      text-align: right;
+    }
+
+    /* Display Utilities */
+    .d-block {
+      display: block;
+    }
+
+    .d-inline {
+      display: inline;
+    }
+
+    .d-inline-block {
+      display: inline-block;
+    }
+
+    .d-flex {
+      display: flex;
+    }
+
+    .d-grid {
+      display: grid;
+    }
+
+    .d-none {
+      display: none;
+    }
+
+    /* Flexbox Utilities */
+    .flex-row {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .flex-column {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .flex-\*1 * {
+      flex: 1;
+    }
+
+    .flex-start {
+      justify-content: flex-start;
+    }
+
+    .flex-end {
+      justify-content: flex-end;
+    }
+
+    .flex-gap-space-S {
+      gap: var(--space-S);
+    }
+
+    .align-start {
+      align-items: flex-start;
+    }
+
+    .align-end {
+      align-items: flex-end;
+    }
+
+    .flex-wrap {
+      flex-wrap: wrap;
+    }
+
+    .flex-nowrap {
+      flex-wrap: nowrap;
+    }
+
+    .align-center {
+      align-items: center;
+    }
+
+    .justify-center {
+      justify-content: center;
+    }
+
+    .items-center {
+      align-items: center;
+    }
+
+    .justify-between {
+      justify-content: space-between;
+    }
+
+    /* Border Utilities */
+    .border {
+      border: 1px solid #ccc;
+    }
+
+    .border-0 {
+      border: none;
+    }
+
+    .border-radius {
+      border-radius: 0.25rem;
+    }
+
+    .border-top {
+      border-top: 1px solid #ccc;
+    }
+
+    .border-bottom {
+      border-bottom: 1px solid #ccc;
+    }
+
+    /* Background Utilities */
+    .bg-light {
+      background-color: #f4f4f4;
+    }
+
+    .bg-dark {
+      background-color: #333;
+    }
+
+    .bg-primary {
+      background-color: #007bff;
+    }
+
+    .bg-secondary {
+      background-color: #6c757d;
+    }
+
+    /* Text Color Utilities */
+    .text-light {
+      color: #f4f4f4;
+    }
+
+    .text-dark {
+      color: #333;
+    }
+
+    .text-primary {
+      color: #007bff;
+    }
+
+    .text-secondary {
+      color: #6c757d;
+    }
+
+    .text-white {
+      color: white;
+    }
+
+    /* Visibility Utilities */
+    .visible {
+      visibility: visible;
+    }
+
+    .invisible {
+      visibility: hidden;
+    }
+
+    /* Overflow Utilities */
+    .overflow-auto {
+      overflow: auto;
+    }
+
+    .overflow-hidden {
+      overflow: hidden;
+    }
+
+    /* Width and Height Utilities */
+    .w-100 {
+      width: 100%;
+    }
+
+    .h-100 {
+      height: 100%;
+    }
+
+    .w-auto {
+      width: auto;
+    }
+
+    .h-auto {
+      height: auto;
+    }
+
+    .max-w-100 {
+      max-width: 100%;
+    }
+
+    .max-h-100 {
+      max-height: 100%;
+    }
+
+    /* Custom Classes */
+
+    .group-title {
+      color: var(--text-opaque);
+    }
+
+    /* Filo placeholders to inject CSS during production */
+    /* style.css */
+    #chat-container {
+      padding: 10px;
+      margin-block: 2rem;
+      text-align: center;
+      height: clamp(300px, 80%, 90vh);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #chat-container>div {
+      width: 100%;
+      height: 100%;
+    }
+
+    #chat-picker {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .card {
+      flex: 1;
+      min-width: 140px;
+      min-height: 63px;
+      border: 1px solid transparent;
+      position: relative;
+
+      .main-button {
+        border-radius: 18px;
+        border: 1px solid hsl(0, 0%, 18%);
+
+        .name {
+          font-weight: 600;
+        }
+
+        .channel {
+          font-size: 0.7rem;
+        }
+      }
+
+      .edit-button {
+        position: absolute;
+        top: 9.5px;
+        right: 9.5px;
+      }
+
+      .edit-button button {
+        padding: 0;
+        height: 44px;
+        width: 44px;
+
+        .icon {
+          font-size: 22px;
+        }
+      }
+    }
+
+    @media (hover: hover) {
+      .card .edit-button {
+        display: none;
+      }
+
+      .card:hover .edit-button {
+        display: flex;
+      }
+
+      .card:focus-within .edit-button {
+        display: flex;
+      }
+    }
+
+    .card button {
+      padding: 0.4rem;
+    }
+
+    .card .main-button .content {
+      flex: 1;
+      display: grid;
+      user-select: none;
+      background-color: transparent;
+      grid-template-columns: 1fr 6fr;
+      grid-template-rows: 1fr 1fr;
+
+      .card-icon {
+        grid-column: 1;
+        grid-row: 1 / span 2;
+        height: 44px;
+        width: 44px;
+        background: var(--tonal);
+        border-radius: 8px;
+        margin-right: 10px;
+      }
+    }
+
+    .card .main-button .content * {
+      white-space: normal;
+    }
+
+    .card:focus-visible {
+      outline: 2px solid var(--primary-opaque);
+    }
+
+    .card:not(.editing),
+    .card:not(.editing) * {
+      user-select: none;
+    }
+
+    .card.editing .main-button {
+      border-style: dashed;
+    }
+
+    .card.editing {
+      padding: 0.4rem;
+      border-radius: 18px;
+      border: 1px dashed hsl(0, 0%, 18%);
+    }
+
+    .card .open-chat-button-container {
+      text-align: right;
+    }
+
+    .card .open-chat-button {
+      min-width: 120px;
+    }
+
+    .card input {
+      padding: 0;
+      width: 100%;
+    }
+
+    .card .token .icon {
+      font-size: inherit;
+    }
+
+    .card .token {
+      display: flex;
+      gap: 4px;
+    }
+
+    #chat-creator {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 4px;
+      padding: 0.6rem;
+      border-radius: 0.4rem;
+      border: 1px solid rgb(61, 61, 61);
+    }
+
+    #drawer {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    #drawer-handle {
+      cursor: grabbing;
+      padding: 8px;
+    }
+
+    @media (pointer: coarse) {
+      * {
+        cursor: default !important;
+      }
+    }
+  </style>
+  <script>
+    // Files inlined by Filo during GitHub workflow
+    // component.js
+    class CModalElement extends HTMLDialogElement {
+      static name = 'c-modal';
+
+      static get observedAttributes() {
+        return ['data-title'];
+      }
+
+      connectedCallback() {
+        const trap = focusTrap.createFocusTrap(this);
+        const head = document.createElement('div');
+        const title = document.createElement('h3');
+        const closeButton = document.createElement('c-button');
+
+        this.trap = trap;
+        this.addEventListener('close', () => this.trap.pause());
+        closeButton.addEventListener('click', () => this.close());
+
+        head.classList.add('head');
+        title.classList.add('title');
+        closeButton.classList.add('close-button');
+        closeButton.setAttribute('icon', 'close');
+        closeButton.setAttribute('variant', 'icon');
+
+        if (this.hasAttribute('data-title')) {
+          title.innerText = this.getAttribute('data-title');
+          head.prepend(title);
+        }
+
+        head.appendChild(closeButton);
+
+        this.prepend(head);
+      }
+
+      open() {
+        this.showModal();
+        this.trap.activate();
+      }
+
+      static {
+        customElements.define(this.name, this, { extends: 'dialog' });
+      }
+    }
+    class CRippleElement extends HTMLElement {
+      static name = 'c-ripple';
+
+      static style = new CSSStyleSheet();
+
+      constructor() {
+        super()
+        this.attachShadow({ mode: 'open' });
+        this.shadowRoot.adoptedStyleSheets = [CRipple.style];
+      }
+
+      ripple(event) {
+        this.rippleAnimation?.cancel();
+
+        const rect = this.surface.getBoundingClientRect();
+        const rippleSize = Math.max(rect.width, rect.height) * 1.2;
+
+        const startX = event.clientX - rect.left - rippleSize / 2;
+        const startY = event.clientY - rect.top - rippleSize / 2;
+        const centerX = rect.width / 2 - rippleSize / 2;
+        const centerY = rect.height / 2 - rippleSize / 2;
+
+        this.rippleAnimation = this.surface.animate({
+          height: [`${rippleSize}px`, `${rippleSize}px`],
+          width: [`${rippleSize}px`, `${rippleSize}px`],
+          top: [`${startY}px`, `${centerY}px`],
+          left: [`${startX}px`, `${centerX}px`],
+          transform: [`scale(0.2)`, `scale(2)`]
+        }, {
+          pseudoElement: '::after',
+          duration: 160,
+          easing: 'cubic-bezier(0.54, 0.13, 0.95, 0.54)',
+          fill: 'forwards'
+        });
+      }
+
+      connectedCallback() {
+        const surface = document.createElement('div');
+        surface.classList.add('surface');
+        this.shadowRoot.appendChild(surface);
+
+        this.surface = surface;
+
+        let element = surface;
+
+        if (this.hasAttribute('for')) {
+          const id = this.getAttribute('for');
+          element = document.getElementById(id) || this.parentElement.getElementById(id) || this.shadowRoot.getElementById(id);
+        }
+
+        element.addEventListener('pointerdown', (event) => {
+
+          this.ripple(event);
+          surface.classList.add('pressed');
+
+          window.addEventListener('pointerup', () => surface.classList.remove('pressed'), { once: true });
+          surface.addEventListener('pointerleave', () => surface.classList.remove('pressed'), { once: true });
+        });
+      }
+
+      static {
+        this.style.replaceSync(`
+  :host {
+    display: flex;
+    margin: auto;
+  }
+    
+  :host, .surface {
+    border-radius: inherit;
+    position: absolute;
+    inset: 0px;
+    overflow: hidden;
+  }
+
+  .surface::after {
+    content: "";
+    opacity: 0;
+    position: absolute;
+  }
+
+  .surface::before {
+    background-color: var(--ripple-hover, #1d1b20);
+    transition: opacity 15ms linear, background-color 15ms linear;
+  }
+
+  .surface::after {
+    background: radial-gradient(closest-side, var(--ripple, black), max(100% - 70px, 65%), transparent 100%);
+    transform-origin: center center;
+    transition: opacity 475ms ease-in-out, top 375ms linear, left 375ms linear, transform 1s linear;
+    display: flex;
+    position: absolute;
+  }
+
+  .pressed::after {
+    opacity: .16;
+    transition-duration: 105ms;
+  }
+  `);
+        customElements.define(this.name, this);
+      }
+    }
+    class COverlayElement extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      static name = 'c-overlay';
+
+      static get observedAttributes() {
+        return ['for'];
+      }
+
+      connectedCallback() {
+        const trap = focusTrap.createFocusTrap(this);
+        this.trap = trap;
+        const wrapper = document.createElement('div');
+        const surface = document.createElement('div');
+        const closeButton = document.createElement('c-button');
+        this.closeButton = closeButton;
+        const handler = document.getElementById(this.getAttribute('for'));
+
+        closeButton.classList.add('overlay-close-button');
+        closeButton.setAttribute('icon', 'close');
+
+        wrapper.classList.add('wrapper');
+        surface.classList.add('surface');
+
+        wrapper.appendChild(closeButton);
+        wrapper.appendChild(surface);
+        surface.innerHTML = this.innerHTML;
+        this.innerHTML = '';
+
+        this.appendChild(wrapper);
+
+        handler.addEventListener('click', (event) => {
+          this.toggle();
+        }, { passive: true });
+        closeButton.addEventListener('click', () => {
+          if (this.classList.contains('fade-open')) {
+            trap.pause();
+            this.classList.remove('fade-open');
+            this.classList.add('fade-close');
+            handler.focus();
+            handler.querySelector('button').focus();
+          }
+        }, { passive: true });
+
+        window.addEventListener('pointerdown', (event) => {
+          if (!this.contains(event.target) && event.target !== handler && !handler.contains(event.target)) {
+            if (this.classList.contains('fade-open')) {
+              trap.pause();
+              this.classList.remove('fade-open');
+              this.classList.add('fade-close');
+            }
+          }
+        });
+
+      }
+
+      toggle() {
+        if (this.classList.contains('fade-open')) {
+          this.classList.remove('fade-open');
+          this.classList.add('fade-close');
+        } else {
+          this.classList.remove('fade-close');
+          this.classList.add('fade-open');
+          this.closeButton.querySelector('button').focus();
+          this.addEventListener('animationend', () => {
+            this.closeButton.querySelector('button').focus();
+            if (this.trap.paused) {
+              this.trap.unpause();
+            } else {
+              this.trap.activate({ allowOutsideClick: true });
+            }
+          }, { once: true });
+        }
+      }
+
+      static {
+        customElements.define(this.name, this);
+      }
+    }
+    class CAccordianElement extends HTMLElement {
+      static name = 'c-accordian';
+
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        const head = document.createElement('c-button');
+        const content = document.createElement('div');
+
+        head.classList.add('head')
+        head.innerText = this.getAttribute('label');
+        head.setAttribute('icon', 'expand_circle_down');
+        head.setAttribute('trailing-icon', '');
+
+        if (!this.getAttribute('aria-expanded')) {
+          this.setAttribute('aria-expanded', 'false');
+        }
+
+        content.classList.add('content')
+        content.innerHTML = this.innerHTML;
+        this.innerHTML = '';
+
+        this.appendChild(head);
+        this.appendChild(content);
+      }
+
+      static {
+        customElements.define(this.name, this);
+      }
+    }
+    class CButtonElement extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      static name = 'c-button';
+
+      static get observedAttributes() {
+        return ['disabled', 'icon'];
+      }
+
+      attributeChangedCallback(name, oldValue, newValue) {
+        if (!this.button || !this.icon) return;
+
+        if (name === 'disabled') {
+          if (newValue !== null) {
+            this.button.disabled = true;
+          } else {
+            this.button.disabled = false;
+          }
+        }
+
+        if (name === 'icon') {
+          if (oldValue !== newValue) {
+            this.icon.innerText = newValue;
+          }
+        }
+      }
+
+      connectedCallback() {
+        const button = document.createElement('button');
+        const icon = document.createElement('span');
+        const content = document.createElement('span');
+
+        this.button = button;
+        this.icon = icon;
+
+        icon.classList.add('icon');
+        content.classList.add('content');
+
+        const currentHTML = this.innerHTML;
+        content.innerHTML = currentHTML;
+
+        if (this.innerHTML) {
+          this.innerHTML = '';
+          button.appendChild(content);
+          if (!this.hasAttribute('variant')) {
+            this.setAttribute('variant', 'text');
+          }
+        } else if (this.hasAttribute('icon')) {
+          this.setAttribute('variant', 'icon');
+        }
+
+        if (this.hasAttribute('icon')) {
+          if (this.hasAttribute('trailing-icon')) {
+            button.appendChild(icon);
+          } else {
+            button.prepend(icon);
+          }
+        }
+
+        if (this.hasAttribute('disabled')) {
+          button.disabled = true;
+        }
+
+        icon.innerText = this.getAttribute('icon');
+        this.appendChild(button);
+
+        button.addEventListener('pointerenter', () => {
+          if (!button.disabled) {
+            const _class = 'hovered';
+            this.classList.add(_class);
+
+            button.addEventListener('pointerleave', () => this.classList.remove(_class), { once: true });
+          }
+        }, { passive: true });
+
+        button.addEventListener('pointerdown', () => {
+          if (!button.disabled) {
+            const _class = 'pressed';
+            this.classList.add(_class);
+
+            window.addEventListener('pointerup', () => this.classList.remove(_class), { once: true });
+            button.addEventListener('pointerleave', () => this.classList.remove(_class), { once: true });
+          }
+        }, { passive: true });
+
+        button.addEventListener('touchstart', () => {
+          if (!button.disabled) {
+            button.classList.add('touched');
+
+            button.addEventListener('focusout', () => {
+              button.classList.remove('touched');
+            }, { passive: true, once: true });
+          }
+        }, { passive: true });
+
+        button.addEventListener('keydown', (event) => {
+          const _class = 'pressed';
+          if (event.key === ' ' || event.key === 'Enter') {
+            this.classList.add(_class);
+          } else {
+            return
+          }
+
+          window.addEventListener('keyup', () => this.classList.remove(_class), { once: true });
+        }, { passive: true });
+
+        // connected callback end
+      }
+
+      static {
+        customElements.define(this.name, this);
+      }
+    }
+
+    class TabsElement extends HTMLInputElement {
+      static elementName = 'c-tab';
+      constructor() {
+        super();
+        this.type = 'radio';
+
+        if (!this.checked) {
+          if (document.getElementById(this.value)) {
+            document.getElementById(this.value).hidden = true;
+          }
+        }
+
+        let allTab = document.querySelectorAll(`input[is="c-tab"][name="${this.name}"]`);
+
+        setInterval(() => {
+          allTab = document.querySelectorAll(`input[is="c-tab"][name="${this.name}"]`);
+        }, 600);
+
+        this.addEventListener('change', () => {
+          allTab.forEach((eachTab) => {
+            const tabFrame = document.getElementById(eachTab.value);
+
+            if (tabFrame) {
+              tabFrame.hidden = true;
+            }
+          })
+
+          const tabFrame = document.getElementById(this.value);
+
+          if (this.checked) {
+            if (tabFrame) {
+              tabFrame.hidden = false;
+            }
+          } else if (tabFrame && !tabFrame.hidden) {
+            tabFrame.hidden = true;
+          }
+        })
+      }
+    }
+
+    customElements.define(TabsElement.elementName, TabsElement, { extends: 'input' });
+    // # app.js
+
+    const mediaSmallPhone = 384;
+    const mediaPhone = 768;
+
+    const body = document.body;
+    const appBody = document.querySelector('#app');
+    const menuButton = document.querySelector('#menu-button');
+    const appNavigationWrapper = document.querySelector('#app-navigation-wrapper');
+    const appNavigation = document.querySelector('#app-navigation');
+    const backdrop = document.querySelector('#backdrop');
+    const themeSelection = document.querySelector('#theme-selection');
+    const openConfigDB = indexedDB.open("config");
+
+    const app = {
+      themes: [
+        {
+          name: 'Warm Light',
+          description: 'A light theme with warm tones for a cozy and inviting design.',
+          value: `color-scheme: light;
+
+    --primary: hsl(34 40% 92%);
+    --primary-100: hsl(34 36% 96%);
+    --primary-200: hsl(34 32% 90%);
+    --primary-300: hsl(34 28% 84%);
+    --primary-shadow: hsl(34, 30%, 70%, 32%);
+    --primary-opaque: hsl(34 40% 64% / 0.8);
+
+    --secondary: hsl(22 80% 50%);
+    --secondary-100: hsl(22 76% 58%);
+    --secondary-200: hsl(22 72% 64%);
+    --secondary-300: hsl(22 60% 54%);
+    --secondary-shadow: hsl(22 40% 50% / 72%);
+
+    --hovered: hsl(34 36% 96%);
+    --pressed: hsl(34 32% 90%);
+
+    --tonal: hsl(34 28% 88%);
+    --tonal-hovered: hsl(34, 24%, 82%);
+    --tonal-pressed: hsl(34, 22%, 76%);
+    --tonal-ripple: hsl(22, 76%, 58%);
+    --tonal-shadow: hsl(22, 50%, 60%, 80%);
+    --tonal-outline: hsl(22 100% 54%);
+
+    --elevated: hsl(34 36% 98%);
+    --elevated-hovered: hsl(34 30% 94%);
+    --elevated-pressed: hsl(34 28% 90%);
+    --elevated-shadow-front: hsl(34, 40%, 80%, 80%);
+    --elevated-shadow-back: hsl(34, 20%, 70%, 30%);
+
+    --accent: hsl(22, 80%, 55%);
+
+    --background: hsl(40 30% 98%);
+    --surface: hsl(34 36% 96%);
+    --overlay-shadow: transparent;
+    --on-surface: hsl(40 20% 92%);
+
+    --text: hsl(22 100% 14%);
+    --text-primary: hsl(34, 40%, 20%);
+    --text-tonal: hsl(22 100% 24%);
+    --button-text: hsl(22 100% 24%);
+
+    --filled: hsl(22 80% 50%);
+    --filled-color: hsl(40 36% 96%);
+    --filled-hovered: hsl(22 76% 58%);
+    --filled-pressed: hsl(22 72% 64%);
+    --filled-ripple: hsl(22 36% 94% / 1);
+    --filled-shadow: hsl(22 16% 84% / 1);
+
+    --ripple: hsl(22 34% 40% / 1);
+    --button-hover: hsl(22 28% 88% / 1);
+
+    --disabled: hsl(34 10% 88% / 0.6);
+    --disabled-text: hsl(34 20% 40% / 0.4);
+    --disabled-outline: hsl(34 10% 60% / 0.25);
+      `
+        },
+        {
+          name: 'Warm Dark',
+          description: 'A dark theme with warm tones for a soothing design; welcome to the dark side.',
+          value: `
+  color-scheme: dark;
+
+  /* palette */
+  --primary: hsl(18 24% 20% / 1);
+  --primary-100: hsl(16 18% 18%);
+  --primary-200: hsl(16 18% 22%);
+  --primary-300: hsl(16 18% 28%);
+  --primary-shadow: hsl(16, 20%, 30%, 32%);
+  --primary-opaque: hsl(22 26% 64% / 0.8);
+
+  --secondary: hsl(32 72% 75% / 1);
+  --secondary-100: hsl(32 66% 68% / 1);
+  --secondary-200: hsl(32 62% 62% / 1);
+  --secondary-300: hsl(32 44% 76% / 1);
+  --secondary-shadow: hsl(32 34% 70% / 72%);
+
+  --hovered: hsl(16 18% 18%);
+  --pressed: hsl(16 18% 22%);
+
+  --tonal: hsl(16 18% 26%);
+  --tonal-hovered: hsl(16, 18%, 32%);
+  --tonal-pressed: hsl(16, 20%, 38%);
+  --tonal-ripple: hsl(16, 76%, 68%);
+  --tonal-shadow: hsl(16, 50%, 30%, 80%);
+  --tonal-outline: hsl(22 100% 74%);
+
+  --elevated: hsl(16 16% 16%);
+  --elevated-hovered: hsl(16 10% 20%);
+  --elevated-pressed: hsl(16 12% 24%);
+  --elevated-shadow-front: hsl(16, 40%, 14%, 80%);
+  --elevated-shadow-back: hsl(16, 20%, 20%, 30%);
+
+  --accent: hsl(16, 80%, 70%);
+
+  --background: hsl(22 12% 7%);
+  --surface: hsl(16 10% 10%);
+  --overlay-shadow: transparent;
+  --on-surface: hsl(24 12% 11%);
+
+  --text: hsl(22 100% 92%);
+  --text-primary: hsl(16, 10%, 85%);
+  --text-tonal: hsl(22 100% 84%);
+  --button-text: hsl(22 100% 84%);
+
+  --filled: hsl(32 72% 75% / 1);
+  --filled-color: hsl(22 44% 14%);
+  --filled-hovered: hsl(32 66% 68% / 1);
+  --filled-pressed: hsl(32 62% 62% / 1);
+  --filled-ripple: hsl(32 36% 14% / 1);
+  --filled-shadow: hsl(32 16% 24% / 1);
+
+  --ripple: hsl(32 34% 66% / 1);
+  --button-hover: hsl(32 18% 16% / 1);
+
+  --disabled: hsl(16 8% 16% / 0.6);
+  --disabled-text: hsl(22 20% 60% / 0.4);
+  --disabled-outline: hsl(22 10% 40% / 0.25);
+  `
+        }
+      ],
+      iconAxeConfig: ':opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200',
+    };
+
+    const lastTheme = localStorage.getItem('lastTheme');
+
+    if (lastTheme) {
+      document.documentElement.setAttribute('data-theme', lastTheme);
+    } else {
+      const prefersDarkmode = window.matchMedia('prefers-color-scheme: dark').matches;
+
+      document.documentElement.setAttribute('data-theme', (prefersDarkmode ? 'Warm Dark' : 'Warm Light'));
+    }
+
+    const themeStyle = document.createElement('style');
+
+    app.themes.forEach((theme) => {
+      themeStyle.innerHTML += `[data-theme="${theme.name}"] { ${theme.value} }\n`;
+
+      document.body.appendChild(themeStyle);
+    });
+
+    themeSelection.innerHTML = '';
+
+    app.themes.forEach((theme) => {
+      let themeButton = document.createElement('c-button');
+      themeButton.innerHTML = theme.name;
+
+      themeSelection.appendChild(themeButton);
+
+      themeButton.addEventListener('click', () => {
+        document.documentElement.setAttribute('data-theme', theme.name);
+        localStorage.setItem('lastTheme', theme.name);
+      });
+    })
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        const requestFullscreen =
+          document.documentElement.requestFullscreen ||
+          document.documentElement.mozRequestFullScreen ||
+          document.documentElement.webkitRequestFullscreen ||
+          document.documentElement.msRequestFullscreen;
+
+        if (requestFullscreen) requestFullscreen.call(document.documentElement);
+      } else {
+        const exitFullscreen =
+          document.exitFullscreen ||
+          document.mozCancelFullScreen ||
+          document.webkitExitFullscreen ||
+          document.msExitFullscreen;
+
+        if (exitFullscreen) exitFullscreen.call(document);
+      }
+    }
+
+    function getUsedIcons() {
+      const icons = document.querySelectorAll('.icon');
+      let iconList;
+      if (icons) {
+        iconList = new Set();
+        icons.forEach((item) => {
+          if (!iconList.has(item.innerHTML.trim())) {
+            iconList.add(item.innerHTML.trim());
+          }
+        });
+      }
+
+      return iconList;
+    }
+
+    const iconStyle = document.createElement('link');
+    document.body.appendChild(iconStyle);
+
+    function injectIcon() {
+      const iconList = getUsedIcons();
+
+      let e = Object.prototype.toString.call(iconList) === '[object Set]' ? '' : '&icon_names=';
+
+      const iconNames = Array.from(iconList).sort().join(',');
+      const queryString = `&icon_names=${iconNames}`;
+      iconStyle.setAttribute('rel', 'stylesheet');
+
+      if (iconStyle.getAttribute('href') !== `https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded${app.iconAxeConfig}${queryString}`) {
+        iconStyle.setAttribute('href', `https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded${app.iconAxeConfig}${queryString}`)
+      }
+    }
+
+    function renderMD(source) {
+      console.log(`Source:\n${source}`);
+      const mappedMD = {
+        italic: /\*(.*?)\*/g,
+        bold: /\*\*(?!\*.*\*\*)(.*?)\*\*/g
+      }
+
+      function replaceDelimiters(source, target, by) {
+        return target.test(source) ? source.replace(target, by) : source;
+      }
+
+      source = replaceDelimiters(source, mappedMD.bold, `<b>$1</b>`);
+      source = replaceDelimiters(source, mappedMD.italic, `<i>$1</i>`);
+
+      console.log(`Output:\n${source}`);
+      return source;
+    }
+
+    function getTime(time, timeConfig = {}) {
+      const now = Date.now();
+      const differenceInMs = now - time;
+      const differenceInDays = Math.floor(differenceInMs / (1000 * 60 * 60 * 24));
+
+      const date = new Date(time);
+      const nowDate = new Date(now);
+      const isToday = date.toDateString() === nowDate.toDateString();
+
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const isPM = date.getHours() >= 12;
+      const hour12 = isPM ? (date.getHours() - 12 || 12) : (date.getHours() || 12);
+      const hourFormatted = timeConfig.timeFormat === '24-hour' ? hours : String(hour12).padStart(2, '0');
+      const timeString = `${hourFormatted}:${minutes} ${isPM ? 'PM' : 'AM'}`;
+
+      if (isToday) {
+        return timeString;
+      } else if (differenceInDays === 1) {
+        return "yesterday";
+      } else if (differenceInDays === 2) {
+        return "2 days ago";
+      } else {
+        let formattedDate = timeConfig.dateFormat || 'yyyy/mm/dd';
+        formattedDate = formattedDate.replace('yyyy', year).replace('yy', String(year).slice(-2)).replace('mm', month).replace('dd', day);
+        return formattedDate;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const hamburgerMenu = document.querySelector('#menu-button .icon');
+      if (Math.random() <= 0.01) {
+        hamburgerMenu.innerText = '🍔';
+        hamburgerMenu.style.paddingBottom = '8px';
+      }
+    })
+
+
+
+    function displayBackdrop(display) {
+      if (display) {
+        if (backdrop.classList.contains('close') || !backdrop.classList.contains('show')) {
+          backdrop.classList.add('show');
+          backdrop.classList.remove('close');
+        }
+      } else {
+        backdrop.classList.remove('show');
+        backdrop.classList.add('close');
+      }
+    }
+
+
+    function toggleMenu() {
+      const close = 'close-app-navigation';
+      const open = 'open-app-navigation';
+
+      if (window.innerWidth >= mediaPhone) {
+        if (appBody.classList.contains(close)) {
+          appBody.classList.remove(close);
+          appBody.classList.add(open);
+          appNavigationWrapper.removeAttribute('inert', '');
+
+          displayBackdrop(false);
+        } else {
+          appBody.classList.add(close);
+          appBody.classList.remove(open);
+          appNavigationWrapper.setAttribute('inert', '');
+
+          displayBackdrop(false);
+        }
+      } else {
+        if (appBody.classList.contains(open)) {
+          appBody.classList.remove(open);
+          appBody.classList.add(close)
+          appNavigationWrapper.setAttribute('inert', '');
+
+          displayBackdrop(false);
+        } else {
+          appBody.classList.remove(close);
+          appBody.classList.add(open);
+          appNavigationWrapper.removeAttribute('inert', '');
+
+          displayBackdrop(true);
+        }
+      }
+    }
+
+    menuButton.addEventListener('click', () => {
+      toggleMenu();
+    }, { passive: true });
+
+    backdrop.addEventListener('click', () => {
+      if (appBody.classList.contains('open-app-navigation')) {
+        appBody.classList.remove('open-app-navigation');
+        appBody.classList.add('close-app-navigation')
+        appNavigationWrapper.setAttribute('inert', '');
+
+        displayBackdrop(false);
+      }
+    }, { passive: true });
+
+    document.addEventListener('resize', () => {
+      const close = 'close-app-navigation';
+      const open = 'open-app-navigation';
+
+      if (window.innerWidth <= mediaPhone) {
+        if (appBody.classList.contains(close)) {
+          appBody.classList.remove(close);
+          appBody.classList.add(open);
+          appNavigationWrapper.removeAttribute('inert', '');
+        } else {
+          appBody.classList.add(close);
+          appBody.classList.remove(open);
+          appNavigationWrapper.setAttribute('inert', '');
+        }
+      }
+    }, { passive: true })
+
+    injectIcon();
+    setInterval(() => {
+      injectIcon();
+    }, 1000);
+
+    // # script.js
+  </script>
+</body>
+
+</html>

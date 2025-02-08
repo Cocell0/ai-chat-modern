@@ -1,11 +1,29 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 require('dotenv').config();
+const { execSync } = require('child_process');
 
-const appLocation = process.env.APP_LOCATION;
+let appLocation = process.env.APP_LOCATION;
+
+// Check if running on GitHub
+if (process.env.GITHUB_REF) {
+  if (process.env.GITHUB_REF === 'refs/heads/development' || (process.env.GITHUB_EVENT_NAME === 'release' && process.env.GITHUB_EVENT_RELEASE_PRERELEASE === 'true')) {
+    appLocation = process.env.APP_LOCATION_DEVELOPMENT;
+  }
+} else {
+  // Else if running locally, check current git branch
+  try {
+    const branch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
+    if (branch === 'development') {
+      appLocation = process.env.APP_LOCATION_DEVELOPMENT;
+    }
+  } catch (error) {
+    console.error('Error detecting Git branch:', error);
+  }
+}
 
 (async () => {
-  const browser = await puppeteer.launch({ headless: false, slowMo: 60, defaultViewport: null, args: ['--disable-notifications', '--disable-infobars', '--start-maximized', '--disable-popup-blocking'] });
+  const browser = await puppeteer.launch({ headless: true, slowMo: 60, defaultViewport: null, args: ['--disable-notifications', '--disable-infobars', '--start-maximized', '--disable-popup-blocking'] });
   const page = await browser.newPage();
 
   await page.goto(appLocation);
