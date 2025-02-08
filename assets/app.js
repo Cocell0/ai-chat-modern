@@ -10,7 +10,7 @@ const appNavigationWrapper = document.querySelector('#app-navigation-wrapper');
 const appNavigation = document.querySelector('#app-navigation');
 const backdrop = document.querySelector('#backdrop');
 const themeSelection = document.querySelector('#theme-selection');
-const configDB = indexedDB.open("config");
+const openConfigDB = indexedDB.open("config");
 
 const app = {
   themes: [

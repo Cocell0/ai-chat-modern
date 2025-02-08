@@ -1,5 +1,5 @@
 // component.js
-class CModal extends HTMLDialogElement {
+class CModalElement extends HTMLDialogElement {
   static name = 'c-modal';
 
   static get observedAttributes() {
@@ -41,7 +41,7 @@ class CModal extends HTMLDialogElement {
     customElements.define(this.name, this, { extends: 'dialog' });
   }
 }
-class CRipple extends HTMLElement {
+class CRippleElement extends HTMLElement {
   static name = 'c-ripple';
 
   static style = new CSSStyleSheet();
@@ -142,7 +142,7 @@ class CRipple extends HTMLElement {
     customElements.define(this.name, this);
   }
 }
-class COverlay extends HTMLElement {
+class COverlayElement extends HTMLElement {
   constructor() {
     super();
   }
@@ -223,7 +223,7 @@ class COverlay extends HTMLElement {
     customElements.define(this.name, this);
   }
 }
-class CAccordian extends HTMLElement {
+class CAccordianElement extends HTMLElement {
   static name = 'c-accordian';
 
   constructor() {
@@ -255,7 +255,7 @@ class CAccordian extends HTMLElement {
     customElements.define(this.name, this);
   }
 }
-class CButton extends HTMLElement {
+class CButtonElement extends HTMLElement {
   constructor() {
     super();
   }
@@ -368,5 +368,28 @@ class CButton extends HTMLElement {
 
   static {
     customElements.define(this.name, this);
+  }
+}
+
+class TabsElement extends HTMLInputElement {
+  static name = 'c-tab';
+  constructor() {
+    super();
+    this.type = 'radio';
+
+      this.addEventListener('change', () => {
+        const tab =  document.getElementById(this.value);
+        if (this.checked) {
+          if (tab) {
+            tab.hidden = false;
+          }
+        } else if (tab && !tab.hidden) {
+          tab.hidden = true;
+        }
+      })
+  }
+
+  static {
+    customElements.define(this.name, this, { extends: 'input' });
   }
 }

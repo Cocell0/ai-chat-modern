@@ -5,8 +5,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI Chat Modern</title>
-  <link rel="stylesheet" href="app.css">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="./assets/app.css">
+  <link rel="stylesheet" href="./assets/style.css">
 </head>
 
 <body>
@@ -33,7 +33,14 @@
 
       <div class="main-wrapper">
         <main aria-labelledby="main-content">
-
+          <label for="main-tab">
+            <input is="c-tab" id="main-tab" name="main-tabs" value="main">
+            Main
+          </label>
+          <label for="primary-tab">
+            <input is="c-tab" id="primary-tab" name="main-tabs" value="primary">
+            Primary
+          </label>
         </main>
       </div>
     </div>
@@ -48,20 +55,21 @@
   <!-- scripts -->
   <script src="https://unpkg.com/tabbable/dist/index.umd.js"></script>
   <script src="https://unpkg.com/focus-trap/dist/focus-trap.umd.js"></script>
-  <script src="component.js"></script>
-  <script src="app.js"></script>
-  <script src="script.js"></script>
+  <script src="./assets/component.js"></script>
+  <script src="./assets/app.js"></script>
+  <script src="./assets/script.js"></script>
   <!-- styles -->
   <style>
     /* Files inlined by Filo during GitHub workflow */
-    /*${filo:app.css}*/ /* Filo placeholders to inject CSS during production */
-    /*${filo:style.css}*/
+    /*${filo:./assets/app.css}*/
+    /* Filo placeholders to inject CSS during production */
+    /*${filo:./assets/style.css}*/
   </style>
   <script>
     // Files inlined by Filo during GitHub workflow
-    //${filo:component.js} Filo placeholders to inject JavaScript during production
-    //${filo:app.js}
-    // ${filo:script.js}
+    //${filo:./assets/component.js} Filo placeholders to inject JavaScript during production
+    //${filo:./assets/app.js}
+    // ${filo:./assets/script.js}
   </script>
 </body>
 
