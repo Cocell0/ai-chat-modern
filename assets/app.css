@@ -256,7 +256,7 @@
   }
 
   button:focus-visible {
-    outline: currentColor;
+    outline: var(--primary-opaque);
   }
 
   .pane {
@@ -366,7 +366,7 @@
   }
 
   input[type=radio]:focus-visible {
-    outline: 2px solid currentColor;
+    outline: 2px solid var(--primary-opaque);
   }
 
   /* --- */
@@ -418,6 +418,7 @@
   .tabs-container {
     display: flex;
     flex-direction: column;
+    gap: calc(var(--space-S) / 2);
   }
 
   .tabs-container * {
@@ -604,7 +605,7 @@
   c-button button:focus-visible {
     animation: outline-grow, outline-shrink;
     animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
-    outline: solid var(--text);
+    outline: solid var(--primary-opaque);
   }
 
   c-button .icon,
@@ -856,17 +857,20 @@
 
   @media (hover: hover) {
     label:has(input[is=c-tab]):hover {
-      background: var(--surface);
+      background: var(--primary-200);
     }
   }
 
   label:has(input[is=c-tab]):active {
-    background: var(--on-surface);
+    background: var(--primary-300);
   }
 
-  label:has(input[is=c-tab]:focus-visible),
+  label:has(input[is=c-tab]:focus-visible) {
+    outline: 2px solid var(--primary-opaque);
+  }
+
   label:has(input[is=c-tab]:checked) {
-    background: var(--on-surface);
+    background: var(--primary-100);
   }
 
   /* Utility Classes */

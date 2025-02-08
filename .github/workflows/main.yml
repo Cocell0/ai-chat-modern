@@ -2,14 +2,17 @@ name: Deploy with Puppeteer
 
 on:
   workflow_dispatch:
-  # push:
-  #   branches:
-  #     - main
-  #   tags:
-  #     - "*"
-  # release:
-  #   types:
-  #     - published
+  push:
+    branches:
+      - main
+      - development
+    tags:
+      - "*"
+  release:
+    types:
+      - published
+    branches:
+      - development
 
 jobs:
   run-puppeteer:
@@ -30,7 +33,8 @@ jobs:
       - name: Process index.html
         run: node filo.js index.html
 
+      - name: Set APP_LOCATION
+        run: echo "APP_LOCATION=${{ github.ref == 'refs/heads/development' || github.event.release.prerelease == true && secrets.APP_LOCATION_DEVELOPMENT || secrets.APP_LOCATION }}" >> $GITHUB_ENV
+
       - name: Run Puppeteer script
-        env:
-          APP_LOCATION: ${{ secrets.APP_LOCATION }}
         run: node puppeteer-deploy.js

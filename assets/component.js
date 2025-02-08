@@ -372,24 +372,43 @@ class CButtonElement extends HTMLElement {
 }
 
 class TabsElement extends HTMLInputElement {
-  static name = 'c-tab';
+  static elementName = 'c-tab';
   constructor() {
     super();
     this.type = 'radio';
 
-      this.addEventListener('change', () => {
-        const tab =  document.getElementById(this.value);
-        if (this.checked) {
-          if (tab) {
-            tab.hidden = false;
-          }
-        } else if (tab && !tab.hidden) {
-          tab.hidden = true;
+    if (!this.checked) {
+      if (document.getElementById(this.value)) {
+        document.getElementById(this.value).hidden = true;
+      }
+    }
+
+    let allTab = document.querySelectorAll(`input[is="c-tab"][name="${this.name}"]`);
+
+    setInterval(() => {
+      allTab = document.querySelectorAll(`input[is="c-tab"][name="${this.name}"]`);
+    }, 600);
+
+    this.addEventListener('change', () => {
+      allTab.forEach((eachTab) => {
+        const tabFrame = document.getElementById(eachTab.value);
+
+        if (tabFrame) {
+          tabFrame.hidden = true;
         }
       })
-  }
 
-  static {
-    customElements.define(this.name, this, { extends: 'input' });
+      const tabFrame = document.getElementById(this.value);
+
+      if (this.checked) {
+        if (tabFrame) {
+          tabFrame.hidden = false;
+        }
+      } else if (tabFrame && !tabFrame.hidden) {
+        tabFrame.hidden = true;
+      }
+    })
   }
 }
+
+customElements.define(TabsElement.elementName, TabsElement, { extends: 'input' });

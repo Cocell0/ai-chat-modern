@@ -19,7 +19,6 @@ const app = {
       description: 'A light theme with warm tones for a cozy and inviting design.',
       value: `color-scheme: light;
 
-    /* palette */
     --primary: hsl(34 40% 92%);
     --primary-100: hsl(34 36% 96%);
     --primary-200: hsl(34 32% 90%);

@@ -20,8 +20,15 @@
         <nav id="app-navigation">
           <h3>Navigation</h3>
           <hr>
-          <section>
-
+          <section id="navigation-tabs" class="tabs-container">
+            <label for="main-tab">
+              <input is="c-tab" id="main-tab" name="main-tabs" value="main" checked>
+              Main
+            </label>
+            <label for="primary-tab">
+              <input is="c-tab" id="primary-tab" name="main-tabs" value="primary">
+              Primary
+            </label>
           </section>
         </nav>
       </div>
@@ -33,14 +40,8 @@
 
       <div class="main-wrapper">
         <main aria-labelledby="main-content">
-          <label for="main-tab">
-            <input is="c-tab" id="main-tab" name="main-tabs" value="main">
-            Main
-          </label>
-          <label for="primary-tab">
-            <input is="c-tab" id="primary-tab" name="main-tabs" value="primary">
-            Primary
-          </label>
+          <div id="main">Main</div>
+          <div id="primary">Primary</div>
         </main>
       </div>
     </div>
