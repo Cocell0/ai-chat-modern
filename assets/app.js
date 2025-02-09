@@ -113,10 +113,10 @@ const app = {
 
   --accent: hsl(16, 80%, 70%);
 
-  --background: hsl(22 12% 7%);
-  --surface: hsl(16 10% 10%);
+  --background: hsl(22 12% 5%);
+  --surface: hsl(16 10% 7%);
   --overlay-shadow: transparent;
-  --on-surface: hsl(24 12% 11%);
+  --on-surface: hsl(24 12% 7%);
 
   --text: hsl(22 100% 92%);
   --text-primary: hsl(16, 10%, 85%);
