@@ -361,10 +361,6 @@
     border: none;
   }
 
-  input[type=radio] {
-    border-radius: var();
-  }
-
   input[type=radio]:focus-visible {
     outline: 2px solid var(--primary-opaque);
   }
@@ -390,7 +386,7 @@
     left: 0;
     top: 0;
     padding-left: var(--space-S);
-    padding-top: var(--space-S);
+    padding-top: calc(14px + var(--space-S));
     z-index: var(--z-overlay);
   }
 
@@ -434,6 +430,7 @@
   #app-interface header {
     padding: var(--space-S);
     padding-bottom: 2px;
+    padding-top: calc(14px + var(--space-S));
     display: flex;
     align-items: center;
     justify-content: end;
@@ -457,7 +454,7 @@
 
   @media only screen and (min-width: 768px) {
     #settings {
-      top: 62px;
+      top: 76px;
       right: var(--space-S);
     }
 
@@ -855,6 +852,7 @@
     border-radius: var(--space-S);
     padding: 6px;
     display: flex;
+
     .name {
       flex: 10;
       margin-inline: 4px;

@@ -219,7 +219,6 @@ class COverlayElement extends HTMLElement {
     }
   }
 }
-customElements.define(COverlayElement.elementName, COverlayElement);
 class CAccordianElement extends HTMLElement {
   static name = 'c-accordian';
 
@@ -407,4 +406,5 @@ class TabsElement extends HTMLInputElement {
   }
 }
 
+customElements.define(COverlayElement.elementName, COverlayElement);
 customElements.define(TabsElement.elementName, TabsElement, { extends: 'input' });
