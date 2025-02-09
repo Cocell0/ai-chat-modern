@@ -1,169 +1,110 @@
 /* style.css */
-#chat-container {
-  padding: 10px;
-  margin-block: 2rem;
-  text-align: center;
-  height: clamp(300px, 80%, 90vh);
+
+#MAIN-FRAME-ai-chat {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: center;
+  gap: var(--space-S);
+}
+
+#MAIN-FRAME-ai-chat button {
+  background: var(--primary-100);
+}
+
+#MAIN-FRAME-ai-chat button:active {
+  background: var(--primary-300);
+}
+
+#MAIN-FRAME-ai-chat button:disabled {
+  background: var(--disabled);
+  filter: grayscale(1);
+}
+
+#MAIN-FRAME-ai-chat>input,
+#MAIN-FRAME-ai-chat>div input,
+#MAIN-FRAME-ai-chat>div textarea {
+  border: 1px solid var(--tonal);
+  border-radius: var(--space-B);
+  padding: var(--space-B);
+}
+
+
+#MAIN-FRAME-ai-chat>input {
+  border-radius: calc(9999*9999px);
+}
+
+#MAIN-FRAME-ai-chat>div {
+  display: flex;
+  flex-direction: column;
   align-items: center;
 }
 
-#chat-container>div {
-  width: 100%;
-  height: 100%;
+#MAIN-FRAME-ai-chat div textarea {
+  width: clamp(240px, 540px, 864px);
+  min-height: 140px;
 }
 
-#chat-picker {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-}
-
-.card {
-  flex: 1;
-  min-width: 140px;
-  min-height: 63px;
-  border: 1px solid transparent;
-  position: relative;
-
-  .main-button {
-    border-radius: 18px;
-    border: 1px solid hsl(0, 0%, 18%);
-
-    .name {
-      font-weight: 600;
-    }
-
-    .channel {
-      font-size: 0.7rem;
-    }
-  }
-
-  .edit-button {
-    position: absolute;
-    top: 9.5px;
-    right: 9.5px;
-  }
-
-  .edit-button button {
-    padding: 0;
-    height: 44px;
-    width: 44px;
-
-    .icon {
-      font-size: 22px;
-    }
-  }
-}
-
-@media (hover: hover) {
-  .card .edit-button {
-    display: none;
-  }
-
-  .card:hover .edit-button {
-    display: flex;
-  }
-
-  .card:focus-within .edit-button {
-    display: flex;
-  }
-}
-
-.card button {
-  padding: 0.4rem;
-}
-
-.card .main-button .content {
-  flex: 1;
-  display: grid;
-  user-select: none;
-  background-color: transparent;
-  grid-template-columns: 1fr 6fr;
-  grid-template-rows: 1fr 1fr;
-
-  .card-icon {
-    grid-column: 1;
-    grid-row: 1 / span 2;
-    height: 44px;
-    width: 44px;
-    background: var(--tonal);
-    border-radius: 8px;
-    margin-right: 10px;
-  }
-}
-
-.card .main-button .content * {
-  white-space: normal;
-}
-
-.card:focus-visible {
+#MAIN-FRAME-ai-chat button:focus-visible {
   outline: 2px solid var(--primary-opaque);
 }
 
-.card:not(.editing),
-.card:not(.editing) * {
+
+#MAIN-FRAME-ai-chat #userNameEl,
+#MAIN-FRAME-ai-chat #botNameEl,
+#MAIN-FRAME-ai-chat #ratingReasonEl {
+  background: var(--light-gray-accent);
+  margin-top: var(--d-5px);
+  padding: 6px;
+}
+
+.dark #MAIN-FRAME-ai-chat #userNameEl,
+.dark #MAIN-FRAME-ai-chat #botNameEl,
+.dark #MAIN-FRAME-ai-chat #ratingReasonEl {
+  background: var(--dark-gray-accent);
+}
+
+#MAIN-FRAME-ai-chat #ratingReasonEl {
+  margin-block: var(--space-S);
+}
+
+#MAIN-FRAME-ai-chat #auto-improve,
+#MAIN-FRAME-ai-chat #autoRespondCtn {
+  padding: 5px;
+  border-radius: 3rem;
+  border: none;
+  font-size: inherit;
+  background: white;
+  color: inherit;
+  background: var(--light-gray-accent);
+  cursor: pointer;
   user-select: none;
 }
 
-.card.editing .main-button {
-  border-style: dashed;
+#MAIN-FRAME-ai-chat #auto-improve {
+  display: none;
 }
 
-.card.editing {
-  padding: 0.4rem;
-  border-radius: 18px;
-  border: 1px dashed hsl(0, 0%, 18%);
+#MAIN-FRAME-ai-chat textarea {
+  padding: var(--space-S) !important;
+  box-sizing: border-box;
+  resize: vertical;
 }
 
-.card .open-chat-button-container {
-  text-align: right;
+#MAIN-FRAME-ai-chat #chatLogsEl {
+  height: 450px;
 }
 
-.card .open-chat-button {
-  min-width: 120px;
+#MAIN-FRAME-ai-chat #inputEl {
+  height: 18vh;
 }
 
-.card input {
-  padding: 0;
-  width: 100%;
+#MAIN-FRAME-ai-chat #tipEl {
+  padding: var(--space-S);
 }
 
-.card .token .icon {
-  font-size: inherit;
+#MAIN-FRAME-ai-chat .tipbox {
+  padding: var(--space-S);
+  background: var(--surface);
+  border-radius: var(--d-1rem);
 }
 
-.card .token {
-  display: flex;
-  gap: 4px;
-}
-
-#chat-creator {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  margin-bottom: 4px;
-  padding: 0.6rem;
-  border-radius: 0.4rem;
-  border: 1px solid rgb(61, 61, 61);
-}
-
-#drawer {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
-#drawer-handle {
-  cursor: grabbing;
-  padding: 8px;
-}
-
-@media (pointer: coarse) {
-  * {
-    cursor: default !important;
-  }
-}

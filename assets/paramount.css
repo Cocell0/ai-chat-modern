@@ -1,0 +1,11 @@
+/* paramount.css */
+/* Sounds stupid, I know. */
+@media (pointer: coarse) {
+  * {
+    cursor: default !important;
+  }
+}
+
+*[hidden] {
+  display: none !important;
+}

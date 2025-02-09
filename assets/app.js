@@ -89,6 +89,8 @@ const app = {
   --primary-shadow: hsl(16, 20%, 30%, 32%);
   --primary-opaque: hsl(22 26% 64% / 0.8);
 
+  --disabled: hsl(24 12% 4%);
+
   --secondary: hsl(32 72% 75% / 1);
   --secondary-100: hsl(32 66% 68% / 1);
   --secondary-200: hsl(32 62% 62% / 1);

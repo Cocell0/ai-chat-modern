@@ -21,15 +21,25 @@
           <h3>Navigation</h3>
           <hr>
           <section id="navigation-tabs" class="tabs-container">
-            <label for="tab-ai-chat">
-              <input is="c-tab" id="tab-ai-chat" name="main-tabs" value="ai-chat" checked>
+            <label for="MAIN-TAB-ai-chat">
+              <input is="c-tab" id="MAIN-TAB-ai-chat" name="MAIN-TABS" value="MAIN-FRAME-ai-chat" checked>
               <span class="icon">auto_awesome</span>
               <span class="name">AI Chat</span>
             </label>
-            <label for="tab-public-chat">
-              <input is="c-tab" id="tab-public-chat" name="main-tabs" value="public-chat">
+            <label for="MAIN-TAB-rules">
+              <input is="c-tab" id="MAIN-TAB-rules" name="MAIN-TABS" value="MAIN-FRAME-rules">
+              <span class="icon">gavel</span>
+              <span class="name">Rules</span>
+            </label>
+            <label for="MAIN-TAB-public-chat">
+              <input is="c-tab" id="MAIN-TAB-public-chat" name="MAIN-TABS" value="MAIN-FRAME-public-chat">
               <span class="icon">forum</span>
               <span class="name">Public Chat</span>
+            </label>
+            <label for="MAIN-TAB-report-users">
+              <input is="c-tab" id="MAIN-TAB-report-users" name="MAIN-TABS" value="MAIN-FRAME-report-users">
+              <span class="icon">block</span>
+              <span class="name">Report Users</span>
             </label>
           </section>
         </nav>
@@ -42,8 +52,767 @@
 
       <div class="main-wrapper">
         <main aria-labelledby="main-content">
-          <div id="ai-chat">Main</div>
-          <div id="public-chat">Primary</div>
+          <div id="MAIN-FRAME-ai-chat">
+            <h1 style="margin-bottom:0.5rem; margin-top: 4rem; text-align: center;">
+              [$meta.title]
+            </h1>
+            <div id="generaaaaaa" style="display: none; text-align: left">
+              Views: [generatorStats("views")]
+              <br>
+              Last edit: [generatorStats("lastEditTime")]
+            </div>
+
+            <div style="font-size:85%; margin-bottom:1rem; margin-top:1rem;">
+              <button id="generateCharactersAndScenarioBtn" onclick="generateCharactersAndScenario()"
+                style="margin-bottom:0.25rem;">
+                ✨ generate characters
+              </button>
+              <!--     <button id="shareSessionBtn" onclick="copySessionShareLink()" style="margin-bottom:0.25rem;">🔗 share current chat</button> -->
+              <div id="generateCharactersAndScenarioLoaderEl"></div>
+            </div>
+
+            <div>— Names —</div>
+            <input id="botNameEl" placeholder="The bot's nickname"
+              oninput="localStorage.botName=this.value, update(), updateCharacterNameViews()" />
+            <input id="userNameEl" placeholder="Your nickname"
+              oninput="localStorage.userName=this.value, update(), updateCharacterNameViews()" />
+
+            <div style="margin-top:2rem;">
+              — <b class="containsCharName">[botName]</b> Character
+              Description —
+            </div>
+            <div style="position:relative; width:100%;">
+              <textarea id="botDescriptionEl"
+                placeholder="Describe who the bot is and what personality you want them to have."
+                oninput="localStorage.botDescription=this.value; botDescriptionDeleteBtn.dataset.mode='delete'; botDescriptionDeleteBtn.style.display='';"></textarea>
+              <div style="position:absolute; bottom:0.5rem; width:100%; height:0;">
+                <button id="generateBotDescriptionBtn"
+                  onclick="generateCharacterDescription('bot', this); botDescriptionDeleteBtn.dataset.mode='delete';"
+                  style="font-size:70%;">
+                  ✨ generate
+                </button>
+              </div>
+              <button id="botDescriptionDeleteBtn" data-mode="delete"
+                onclick="if(this.dataset.mode==='delete') { window.deletedBotDescription=botDescriptionEl.value; botDescriptionEl.value=''; this.dataset.mode='undo'; } else { botDescriptionEl.value=window.deletedBotDescription; this.dataset.mode='delete'; }; localStorage.botDescription=botDescriptionEl.value;"
+                style="position:absolute; top:-0.75rem; right:0.5rem; font-size:60%; display:none;"></button>
+              <style>
+                #botDescriptionDeleteBtn[data-mode='delete']:before {
+                  content: '🗑️ delete';
+                }
+
+                #botDescriptionDeleteBtn[data-mode='undo']:before {
+                  content: '↩️ undo';
+                }
+              </style>
+            </div>
+
+            <div style="margin-top:2rem;">
+              — <b class="containsCharName">[userName]</b> Character
+              Description —
+            </div>
+            <div style="position:relative; width:100%;">
+              <textarea id="userDescriptionEl" placeholder="Describe the character that *you* will be in this chat."
+                oninput="localStorage.userDescription=this.value; userDescriptionDeleteBtn.dataset.mode='delete'; userDescriptionDeleteBtn.style.display='';"></textarea>
+              <div style="position:absolute; bottom:0.5rem; width:100%; height:0;">
+                <button id="generateUserDescriptionBtn"
+                  onclick="generateCharacterDescription('user', this); userDescriptionDeleteBtn.dataset.mode='delete';"
+                  style="font-size:70%;">
+                  ✨ generate
+                </button>
+              </div>
+              <button id="userDescriptionDeleteBtn" data-mode="delete"
+                onclick="if(this.dataset.mode==='delete') { window.deletedUserDescription=userDescriptionEl.value; userDescriptionEl.value=''; this.dataset.mode='undo'; } else { userDescriptionEl.value=window.deletedUserDescription; this.dataset.mode='delete'; }; localStorage.userDescription=userDescriptionEl.value;"
+                style="position:absolute; top:-0.75rem; right:0.5rem; font-size:60%; display:none;"></button>
+              <style>
+                #userDescriptionDeleteBtn[data-mode='delete']:before {
+                  content: '🗑️ delete';
+                }
+
+                #userDescriptionDeleteBtn[data-mode='undo']:before {
+                  content: '↩️ undo';
+                }
+              </style>
+            </div>
+
+            <div style="margin-top:2rem;">— Scenario &amp; Lore —</div>
+            <div style="position:relative; width:100%;">
+              <textarea id="scenarioEl"
+                placeholder="Describe the scenario, lore, side characters, and any other relevant information."
+                oninput="localStorage.scenario=this.value; scenarioDeleteBtn.dataset.mode='delete'; scenarioDeleteBtn.style.display=''; "></textarea>
+              <div style="position:absolute; bottom:0.5rem; width:100%; height:0;">
+                <button id="generateScenarioBtn"
+                  onclick="generateScenarioDescription(this); scenarioDeleteBtn.dataset.mode='delete';"
+                  style="font-size:70%;">
+                  ✨ generate
+                </button>
+              </div>
+              <button id="scenarioDeleteBtn" data-mode="delete"
+                onclick="if(this.dataset.mode==='delete') { window.deletedScenario=scenarioEl.value; scenarioEl.value=''; this.dataset.mode='undo'; } else { scenarioEl.value=window.deletedScenario; this.dataset.mode='delete'; }; localStorage.scenario=scenarioEl.value;"
+                style="position:absolute; top:-0.75rem; right:0.5rem; font-size:60%; display:none;"></button>
+              <style>
+                #scenarioDeleteBtn[data-mode='delete']:before {
+                  content: '🗑️ delete';
+                }
+
+                #scenarioDeleteBtn[data-mode='undo']:before {
+                  content: '↩️ undo';
+                }
+              </style>
+            </div>
+
+            <div style="margin-top:2rem;">— Chat Logs —</div>
+            <div style="position:relative; width:100%;">
+              <textarea id="chatLogsEl"
+                placeholder="The chat logs will show up here, and you can edit them.&#10;&#10;The text here is completely freeform - for example, if you wanted to add a narrator that comes in every now and then, you could just write something like:&#10;&#10;Narrator: Later that day...&#10;&#10;And you can use *asterisks* for actions, and stuff like that."
+                oninput="localStorage.chatLogs=this.value; chatLogsDeleteBtn.dataset.mode='delete'; chatLogsDeleteBtn.style.display='';"></textarea>
+              <div id="loaderEl" style="position:absolute; bottom:1.5rem; right:0.5rem;"></div>
+              <div id="tipEl" style="display:none; position:absolute;top:0;left: 0;right: 0; font-size:85%;">
+                <div class="tipbox">
+                  <div id="tipMessageEl" style="text-align:left;"></div>
+                  <button id="tipDismissBtn" style="margin-top:0.5rem;" onclick="tipEl.style.display='none';">
+                    ✅ understood
+                  </button>
+                </div>
+              </div>
+              <button id="chatLogsDeleteBtn" data-mode="delete"
+                onclick="if(this.dataset.mode==='delete') { window.deletedChatLogs=chatLogsEl.value; chatLogsEl.value=''; this.dataset.mode='undo'; } else { chatLogsEl.value=window.deletedChatLogs; this.dataset.mode='delete'; }; localStorage.chatLogs=chatLogsEl.value;"
+                style="position:absolute; top:-0.75rem; right:0.5rem; font-size:60%; display:none;"></button>
+              <style>
+                #chatLogsDeleteBtn[data-mode='delete']:before {
+                  content: '🗑️ delete';
+                }
+
+                #chatLogsDeleteBtn[data-mode='undo']:before {
+                  content: '↩️ undo';
+                }
+              </style>
+              <div id="deleteAndRegenLastMessageCtn"
+                style="display:[chatLogsEl.value ? 'flex' : 'none']; align-items:center; justify-content:center; text-align: center; margin-block: var(--d-10px); flex-direction: column; gap: var(--d-10px);">
+                <div id="rateLastMessageCtn" style="display:none;">
+                  <div id="ratingReasonCtn" style="display:none;">
+                    <div>
+                      <input id="ratingReasonEl" list="recentRatingReasonsDataList" placeholder="(Optional) Reason"
+                        style="width:150px;" />
+                      <datalist id="recentRatingReasonsDataList"></datalist>
+                    </div>
+                  </div>
+                  <button id="rateLastMessageBadBtn" disabled onclick="rateLastMessage('bad');">
+                    👎
+                  </button>
+                  <button id="rateLastMessageGoodBtn" disabled onclick="rateLastMessage('good');">
+                    👍
+                  </button>
+                </div>
+                <div style="display:flex; gap: var(--d-10px); margin-block: var(--d-10px); justify-content: center;">
+                  <div id="undoRegenMessageCtn" style="display:none;">
+                    <div>
+                      <button style="width:max-content;" onclick="undoRegenLastMessage();">
+                        ↩️ undo
+                      </button>
+                    </div>
+                  </div>
+                  <button id="regenPrevButton" class="regenBtn"
+                    onclick="prevRegenMessage(); chatLogsDeleteBtn.dataset.mode='delete';" disabled>
+                    ⬅️
+                  </button>
+                  <button id="regenMessageBtn" class="regenBtn"
+                    onclick="regenLastMessage(); chatLogsDeleteBtn.dataset.mode='delete';"
+                    data-short-content="🔁 Regen">
+                    🔁 Regenerate Last
+                  </button>
+                  <button id="regenNextButton" class="regenBtn"
+                    onclick="nextRegenMessage(); chatLogsDeleteBtn.dataset.mode='delete';" disabled>
+                    ➡️
+                  </button>
+                  <style>
+                    .regenBtn {
+                      font-size: 75%;
+                      height: min-content;
+                      /* backdrop-filter: blur(200px); */
+                      /* this is a hack to prevent background from being transparent (due to user agent styles - in Chrome, at least) when button is disabled */
+                      /* New code writer: Fk your hack my potato pc cannot handle that!!! Bahhh (╯°□°)╯︵ ┻━┻ */
+                    }
+                  </style>
+                </div>
+                <div>
+                  <div id="undoDeleteLastMessageCtn"
+                    style="display:none; position:absolute; text-align:center; width:100%; font-size:80%; top:0; height:0px;">
+                    <div style="position:absolute; bottom:0.25rem; text-align:center; width:100%;">
+                      <button style="width:max-content;" onclick="undoDeleteLastMessage();">
+                        ↩️ undo
+                      </button>
+                    </div>
+                  </div>
+                  <button id="deleteLastMessageBtn"
+                    onclick="deleteLastMessage(); localStorage.chatLogs=chatLogsEl.value; chatLogsDeleteBtn.dataset.mode='delete';"
+                    style="font-size:75%; min-width:3rem;" data-short-content="🗑️">
+                    🗑️ delete last
+                  </button>
+                </div>
+              </div>
+              <script>
+                updateLastMessageButtonsDisplayIfNeeded();
+              </script>
+            </div>
+
+            <div id="messageBox" style="position:relative; width:100%;">
+              <textarea id="inputEl"
+                placeholder="Write a message here and click send, or just click send to get the AI to generate the next message for you. You can also directly edit the chat log text above."
+                onkeydown="if(event.which === 13) { event.preventDefault(); handleSendButtonClick({mode:'normal'}); }"
+                oninput="localStorage.input=this.value; updateVisibilityOfReplyButtonsAndSelectors();"></textarea>
+              <div style="position:absolute; bottom:0.5rem; width:100%; height:0; margin-left: -3px;">
+                <div id="auto-improve"
+                  oninput="if(!localStorage.knowsWhatAutoImproveFeatureDoes) { alert(this.title); localStorage.knowsWhatAutoImproveFeatureDoes='1'; }"
+                  title="This 'auto-improve' feature allows you write a very short/simple message (like 'pick up the apple') and the AI will expand that into a nicely-written message for you.">
+                  <label class="switch">
+                    <input id="autoImproveCheckboxEl" type="checkbox" style="cursor:pointer;"
+                      onclick="setTimeout(updateVisibilityOfReplyButtonsAndSelectors, 10)" />
+                    <span class="slider"></span>
+                  </label>
+                  <span style="margin-left:0.25rem; width:max-content; cursor:pointer;"
+                    onclick="autoImproveCheckboxEl.checked=!autoImproveCheckboxEl.checked;">auto-improve</span>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex; flex-direction:column; margin-top:0.5rem; align-items:center;">
+              <div style="display:flex;margin-bottom:0.5rem;align-items: center;">
+                <button id="sendMessageBtn"
+                  onclick="handleSendButtonClick({mode:'normal'}); chatLogsDeleteBtn.dataset.mode='delete';"
+                  style="display:flex; font-weight:bold; font-size:110%;">
+                  📨 send message
+                </button>
+                <div id="sendAsCharacterCtn" style="display:none;">
+                  <span
+                    style="padding:0 0.25rem; display:flex; align-items:center; font-size:80%; opacity:0.7;">as</span>
+                  <select id="sendAsCharacterSelectEl" style="height:min-content; font-size:80%; max-width:90px;"
+                    onchange="if(this.value === '~~~NEW_CHAR~~~') { let name = prompt(`Enter the new character's name:`); if(name === null) { this.value=this.options[0].value; } else if(name.trim()) { let newOption = document.createElement('option'); newOption.textContent=name; this.insertBefore(newOption, this.options[this.selectedIndex]); this.value=name; } }"></select>
+                </div>
+              </div>
+              <div id="autoRespondCtn"
+                style="display:flex; align-items:center; justify-content:center; margin-bottom:0.5rem;">
+                <label class="switch">
+                  <input id="autoRespondCheckboxEl" type="checkbox" style="cursor:pointer;" checked
+                    onchange="localStorage.user_autoRespond=this.checked||'';" />
+                  <span class="slider"></span>
+                </label>
+                <span style="padding-inline: 4px;" style="cursor:pointer; user-select:none;"
+                  onclick="autoRespondCheckboxEl.checked=!autoRespondCheckboxEl.checked;">auto-respond</span>
+              </div>
+              <script>
+                if (localStorage.user_autoResponder)
+                  autoRespondCheckboxEl.checked =
+                    !!localStorage.user_autoResponder;
+              </script>
+              <div id="quickReplyButtonsCtn" style="display:flex; gap:0.5rem; flex-wrap:wrap; justify-content:center;">
+              </div>
+              <div id="futureSuggestionsCtn" style="display:none; gap:0.5rem; flex-wrap:wrap; justify-content:center;">
+              </div>
+            </div>
+
+            <div style="position:relative; width:100%; margin-top:1rem;">
+              <textarea id="writingInstructionsEl"
+                placeholder="(Optional) Brief writing instructions for the AI - e.g. writing style, what should happen next, message length, general reminders, things to avoid, etc."
+                style="width:100%; height:80px; resize:vertical; font-size:85%; display:block;"
+                oninput="localStorage.writingInstructions=this.value; writingInstructionsDeleteBtn.dataset.mode='delete'; writingInstructionsDeleteBtn.style.display='';"
+                onchange="this.value=this.value.replace(/\n+/g, ' ')"
+                onkeydown="if(event.keyCode == 13) { event.preventDefault(); }"></textarea>
+              <script>
+                if (window.innerWidth > 600)
+                  writingInstructionsEl.placeholder +=
+                    " Keep this pretty short and 'to the point'. Use the scenario/lore box for longer stuff.";
+              </script>
+              <button id="writingInstructionsDeleteBtn" data-mode="delete"
+                onclick="if(this.dataset.mode==='delete') { window.deletedWritingInstructions=writingInstructionsEl.value; writingInstructionsEl.value=''; this.dataset.mode='undo'; } else { writingInstructionsEl.value=window.deletedWritingInstructions; this.dataset.mode='delete'; }; localStorage.writingInstructions=writingInstructionsEl.value;"
+                style="position:absolute; top:-0.75rem; right:0.5rem; font-size:60%; display:none;"></button>
+              <div style="font-size:75%; opacity:0.7; margin-top:0.125rem;">
+                (remember to keep the "what happens next" part up-to-date if
+                you include that in the above instructions)
+              </div>
+              <style>
+                #writingInstructionsDeleteBtn[data-mode='delete']:before {
+                  content: '🗑️ delete';
+                }
+
+                #writingInstructionsDeleteBtn[data-mode='undo']:before {
+                  content: '↩️ undo';
+                }
+              </style>
+            </div>
+
+            <div style="margin-top:3rem;">
+              <button onclick="saveChatDataToUsersDevice()">
+                💾 save this chat
+              </button>
+              <button onclick="loadChatDataFromUsersDevice()">
+                📁 load a chat
+              </button>
+            </div>
+
+            <div style="margin-block:1rem;">
+              <button id="shareChatBtn" onclick="generateShareLinkForChat()">
+                🔗 share this chat
+              </button>
+              <div id="shareLinkCtn" style="display:none; margin-top:0.5rem;">
+                <input style="width:300px;" id="shareChatLinkInputEl" disabled />
+                <button style="min-width:80px;"
+                  onclick="navigator.clipboard.writeText(shareChatLinkInputEl.value).then(r => this.innerHTML='✅'); setTimeout(() => this.innerHTML='copy link', 2000);">
+                  copy link
+                </button>
+                <div style="font-size:70%; opacity:0.7;">
+                  (this link contains a snapshot of the chat data at the time
+                  the link was generated)
+                </div>
+              </div>
+            </div>
+
+            <script>
+              function chatDataChangedHandler() {
+                shareChatBtn.style.display = "";
+                shareLinkCtn.style.display = "none";
+              }
+              botNameEl.addEventListener("keydown", chatDataChangedHandler);
+              userNameEl.addEventListener("keydown", chatDataChangedHandler);
+              botDescriptionEl.addEventListener(
+                "keydown",
+                chatDataChangedHandler
+              );
+              userDescriptionEl.addEventListener(
+                "keydown",
+                chatDataChangedHandler
+              );
+              scenarioEl.addEventListener("keydown", chatDataChangedHandler);
+              chatLogsEl.addEventListener("keydown", chatDataChangedHandler);
+              writingInstructionsEl.addEventListener(
+                "keydown",
+                chatDataChangedHandler
+              );
+
+              sendMessageBtn.addEventListener(
+                "click",
+                chatDataChangedHandler
+              );
+              writingInstructionsDeleteBtn.addEventListener(
+                "click",
+                chatDataChangedHandler
+              );
+              regenPrevButton.addEventListener(
+                "click",
+                chatDataChangedHandler
+              );
+              regenMessageBtn.addEventListener(
+                "click",
+                chatDataChangedHandler
+              );
+              regenNextButton.addEventListener(
+                "click",
+                chatDataChangedHandler
+              );
+              undoRegenMessageCtn.addEventListener(
+                "click",
+                chatDataChangedHandler
+              );
+              scenarioDeleteBtn.addEventListener(
+                "click",
+                chatDataChangedHandler
+              );
+              generateScenarioBtn.addEventListener(
+                "click",
+                chatDataChangedHandler
+              );
+              generateUserDescriptionBtn.addEventListener(
+                "click",
+                chatDataChangedHandler
+              );
+              userDescriptionDeleteBtn.addEventListener(
+                "click",
+                chatDataChangedHandler
+              );
+              generateBotDescriptionBtn.addEventListener(
+                "click",
+                chatDataChangedHandler
+              );
+              botDescriptionDeleteBtn.addEventListener(
+                "click",
+                chatDataChangedHandler
+              );
+            </script>
+
+            <script>
+              function trackCaretPosition(textArea, callback) {
+                let copy = createCopy(textArea);
+                copy.style.visibility = "hidden";
+                // copy.style.pointerEvents = 'none';
+                // copy.style.color = 'red';
+                // copy.style.opacity = '0.3';
+
+                function updateShadowPositionAndSize() {
+                  let rect = textArea.getBoundingClientRect();
+                  let scrollLeft =
+                    window.pageXOffset || document.documentElement.scrollLeft;
+                  let scrollTop =
+                    window.pageYOffset || document.documentElement.scrollTop;
+                  copy.style.left = `${rect.left + scrollLeft}px`;
+                  copy.style.top = `${rect.top + scrollTop}px`;
+                  copy.style.width = `${textArea.offsetWidth}px`;
+                  copy.style.height = `${textArea.offsetHeight}px`;
+                  copy.scrollTop = textArea.scrollTop;
+                }
+
+                function update() {
+                  updateShadowPositionAndSize();
+                  const position = getCaretPosition(textArea, copy);
+                  callback(position);
+                }
+
+                textArea.addEventListener("input", update);
+                textArea.addEventListener("click", update);
+                textArea.addEventListener("scroll", update);
+                textArea.addEventListener("keydown", function (e) {
+                  if (
+                    [
+                      "ArrowRight",
+                      "ArrowLeft",
+                      "ArrowUp",
+                      "ArrowDown",
+                    ].includes(e.key)
+                  ) {
+                    update();
+                  }
+                });
+
+                let resizeObserver = new ResizeObserver(() =>
+                  updateShadowPositionAndSize()
+                );
+                resizeObserver.observe(textArea);
+
+                let mutationObserver = new MutationObserver((mutations) => {
+                  for (const mutation of mutations) {
+                    if (
+                      Array.from(mutation.removedNodes).includes(textArea)
+                    ) {
+                      copy.remove();
+                      mutationObserver.disconnect();
+                      resizeObserver.disconnect();
+                    }
+                  }
+                });
+                mutationObserver.observe(textArea.parentNode, {
+                  childList: true,
+                });
+
+                function createCopy(textArea) {
+                  let copy = document.createElement("div");
+                  let style = getComputedStyle(textArea);
+
+                  let propertiesToCopy = [
+                    "overflow-x",
+                    "overflow-y",
+                    "display",
+                    "font-family",
+                    "font-size",
+                    "font-weight",
+                    "word-wrap",
+                    "white-space",
+                    "padding-left",
+                    "padding-right",
+                    "padding-top",
+                    "padding-bottom",
+                    "border-left-width",
+                    "border-top-width",
+                    "border-right-width",
+                    "border-bottom-width",
+                    "border-style",
+                    "text-align",
+                  ];
+                  propertiesToCopy.forEach(
+                    (key) => (copy.style[key] = style[key])
+                  );
+
+                  Object.assign(copy.style, {
+                    position: "absolute",
+                    left: `${textArea.offsetLeft}px`,
+                    top: `${textArea.offsetTop}px`,
+                  });
+
+                  document.body.appendChild(copy);
+                  return copy;
+                }
+
+                function getCaretPosition(textArea, copy) {
+                  let { selectionStart, selectionEnd } = textArea;
+                  let value = textArea.value;
+                  let phantomNewline = false;
+
+                  if (
+                    selectionStart === selectionEnd &&
+                    value[selectionStart - 1] === "\n"
+                  ) {
+                    phantomNewline = true;
+                  }
+
+                  copy.textContent = phantomNewline
+                    ? value.substring(0, selectionStart) +
+                    " " +
+                    value.substring(selectionStart)
+                    : value;
+
+                  if (!copy.firstChild) {
+                    let style = getComputedStyle(textArea);
+                    return {
+                      x: textArea.offsetLeft + parseFloat(style.paddingLeft),
+                      y: textArea.offsetTop + parseFloat(style.paddingTop),
+                    };
+                  }
+
+                  let range = document.createRange();
+                  range.setStart(
+                    copy.firstChild,
+                    phantomNewline ? selectionStart + 1 : selectionStart
+                  );
+                  range.setEnd(
+                    copy.firstChild,
+                    phantomNewline ? selectionEnd + 1 : selectionEnd
+                  );
+
+                  const rect = range.getBoundingClientRect();
+                  const scrollLeft =
+                    window.pageXOffset || document.documentElement.scrollLeft;
+                  const scrollTop =
+                    window.pageYOffset || document.documentElement.scrollTop;
+
+                  return {
+                    x: rect.left + scrollLeft, // - textArea.scrollLeft,
+                    y: rect.top + scrollTop, // - textArea.scrollTop,
+                  };
+                }
+              }
+
+              if (typeof continueMessageBtn === "undefined") {
+                // <-- just so, while generator is being edited, multiple buttons aren't created
+                let tmp = document.createElement("div");
+                tmp.innerHTML = `<button id="continueMessageBtn" style="position:absolute; cursor:pointer; font-size:65%; display:none;">▶️</button>`;
+                let btn = tmp.firstElementChild;
+                btn.onmousedown = function () {
+                  handleSendButtonClick({ mode: "continue" });
+                };
+                document.body.append(btn); // must be in the body, so it's position is relative to the body, and not e.g. the chatLogs container element
+              }
+              let chatLogsLineHeightPixels =
+                getLineHeightInPixels(chatLogsEl);
+              trackCaretPosition(chatLogsEl, (pos) => {
+                // console.log(pos.x, pos.y);
+                let thereIsOnlyWhiteSpaceAfterCaret = /^\s*$/.test(
+                  chatLogsEl.value.slice(chatLogsEl.selectionStart)
+                );
+                if (
+                  document.activeElement === chatLogsEl &&
+                  thereIsOnlyWhiteSpaceAfterCaret &&
+                  pageXYIsInsideElement(pos.x, pos.y, chatLogsEl)
+                ) {
+                  continueMessageBtn.style.display = "block";
+                  let buttonHeight = continueMessageBtn.offsetHeight;
+                  continueMessageBtn.style.left = `${pos.x + 10}px`;
+                  continueMessageBtn.style.top = `${pos.y - 0.5 * (buttonHeight - chatLogsLineHeightPixels)
+                    }px`;
+                } else {
+                  continueMessageBtn.style.display = "none";
+                }
+              });
+              chatLogsEl.addEventListener("blur", () => {
+                continueMessageBtn.style.display = "none";
+              });
+              document.addEventListener("click", (event) => {
+                if (event.target !== chatLogsEl) {
+                  continueMessageBtn.style.display = "none"; // not sure why this is required in Chrome Android (blur event handler should be enough)
+                }
+              });
+
+              function getLineHeightInPixels(element) {
+                const style = window.getComputedStyle(element);
+                let lineHeight = style.lineHeight;
+                if (lineHeight === "normal") {
+                  // Normal line heights are usually 1.2 times the font size
+                  const fontSize = parseFloat(style.fontSize);
+                  lineHeight = fontSize * 1.2;
+                } else {
+                  lineHeight = parseFloat(lineHeight);
+                }
+                return lineHeight;
+              }
+              function pageXYIsInsideElement(x, y, element) {
+                const { left, top, right, bottom } =
+                  element.getBoundingClientRect();
+                return (
+                  x >= left + window.pageXOffset &&
+                  x <= right + window.pageXOffset &&
+                  y >= top + window.pageYOffset &&
+                  y <= bottom + window.pageYOffset
+                );
+              }
+            </script>
+
+            <script>
+              (async function () {
+                let hash = window.location.hash.slice(1);
+                if (hash && hash.startsWith("data=")) {
+                  let result = await loadDataFromUrlHash();
+                  if (!result.success) {
+                    loadChatDataFromLocalStorage();
+                  }
+                } else {
+                  loadChatDataFromLocalStorage();
+                }
+
+                updateDeleteButtonVisibility();
+                updateCharacterNameViews();
+                sendAsCharacterCtn.style.display = inputEl.value.trim()
+                  ? "flex"
+                  : "none";
+                update();
+                updateVisibilityOfReplyButtonsAndSelectors();
+
+                chatLogsEl.scrollTop = 999999999; // scroll to the bottom of the chat logs
+                setTimeout(() => {
+                  chatLogsEl.scrollTop = 999999999;
+                }, 3000); // <-- because ad load on mobile causes screen height to change which causes text area height to change. not full-proof, but it'll do for now
+              })();
+            </script>
+          </div>
+          <div id="MAIN-FRAME-rules">
+            <h1>Rules</h1>
+            <p>
+              These are the rules that are required to be followed before interacting with
+              other users.
+            </p>
+            <h2 id="etiquette-and-behavior">Etiquette and Behavior</h2>
+            <ol>
+              <li>
+                <p>
+                  <strong>Greet Politely</strong>: Start conversations with a friendly
+                  greeting. A simple &quot;hello&quot; or &quot;hi&quot; goes a long way in
+                  creating a welcoming atmosphere.
+                </p>
+              </li>
+              <li>
+                <p>
+                  <strong>Be Patient</strong>: Understand that not everyone may respond
+                  immediately. Be patient and give others time to participate in the
+                  conversation.
+                </p>
+              </li>
+              <li>
+                <p>
+                  <strong>Use Emojis Wisely</strong>: Emojis can add personality to your
+                  messages, but use them sparingly and appropriately. Avoid overusing emojis
+                  or using them inappropriately.
+                </p>
+              </li>
+              <li>
+                <p>
+                  <strong>Avoid Spamming</strong>: Refrain from sending multiple repetitive
+                  messages or flooding the chat with unnecessary content. Respect
+                  others&#39; space and allow everyone to contribute.
+                </p>
+              </li>
+            </ol>
+            <h2 id="content-guidelines">Content Guidelines</h2>
+            <ol>
+              <li>
+                <p>
+                  <strong>Stay Safe Online</strong>: Be cautious when sharing links or
+                  clicking on links shared by others. Avoid visiting suspicious websites or
+                  sharing personal information in public chats.
+                </p>
+              </li>
+              <li>
+                <p>
+                  <strong>Keep it PG-13</strong>: Keep the content of your messages suitable
+                  for a general audience. Refrain from sharing explicit content, including
+                  images, videos, or links.
+                </p>
+              </li>
+            </ol>
+            <h2 id="community-interaction">Community Interaction</h2>
+            <ol>
+              <li>
+                <p>
+                  <strong>Participate Actively</strong>: Engage in conversations and
+                  contribute to the community. Your active participation helps create a
+                  vibrant and enjoyable environment for everyone.
+                </p>
+              </li>
+              <li>
+                <p>
+                  <strong>Offer Help</strong>: If someone has a question or needs
+                  assistance, offer your help if you can. Supportive interactions strengthen
+                  the sense of community.
+                </p>
+              </li>
+              <li>
+                <p>
+                  <strong>Be Open-Minded</strong>: Be open to different perspectives and
+                  opinions. Engage in discussions with an open mind, and be willing to learn
+                  from others.
+                </p>
+              </li>
+            </ol>
+            <h2 id="moderation-and-enforcement">Moderation and Enforcement</h2>
+            <ol>
+              <li>
+                <p>
+                  <strong>Follow Moderator Instructions</strong>: Respect the authority of
+                  moderators and follow their instructions. They are there to ensure a
+                  positive and safe environment for everyone.
+                </p>
+              </li>
+              <li>
+                <p>
+                  <strong>Accept Decisions</strong>: Accept decisions made by moderators,
+                  even if you disagree with them. Arguing with moderators can escalate
+                  issues and disrupt the community.
+                </p>
+              </li>
+              <li>
+                <p>
+                  <strong>Report Violations</strong>: If you witness any violations of the
+                  rules, report them to the moderators promptly. Your vigilance helps
+                  maintain the integrity of the community.
+                </p>
+              </li>
+            </ol>
+            <h2 id="private-channel-interactions">Private Channel Interactions</h2>
+            <ol>
+              <li>
+                <p>
+                  <strong>Respect Channel Code</strong>: Only join private channels if you
+                  have been given the channel code by the owner or a member with permission
+                  to share it. Do not share channel codes without permission.
+                </p>
+              </li>
+              <li>
+                <p>
+                  <strong>Privacy Awareness</strong>: Respect the privacy of others in
+                  private channels. Avoid sharing personal information about yourself or
+                  others without consent.
+                </p>
+              </li>
+              <li>
+                <p>
+                  <strong>Consent for Sharing</strong>: Before sharing content from private
+                  channels outside of the channel, obtain consent from all involved members.
+                </p>
+              </li>
+              <li>
+                <p>
+                  <strong>Discretion is Key</strong>: Understand that private channels
+                  provide a space for more personal or specific discussions. Use discretion
+                  and respect the boundaries of the channel&#39;s purpose.
+                </p>
+              </li>
+            </ol>
+          </div>
+          <div id="MAIN-FRAME-public-chat">[chat(chatOne)]</div>
+          <div id="MAIN-FRAME-report-users">[chat(reportUsers)]</div>
         </main>
       </div>
     </div>
@@ -67,6 +836,7 @@
     /*${filo:./assets/app.css}*/
     /* Filo placeholders to inject CSS during production */
     /*${filo:./assets/style.css}*/
+    /*${filo:./assets/paramount.css}*/
   </style>
   <script>
     // Files inlined by Filo during GitHub workflow
@@ -74,6 +844,7 @@
     //${filo:./assets/app.js}
     // ${filo:./assets/script.js}
   </script>
+  <link rel="stylesheet" href="./assets/paramount.css">
 </body>
 
 </html>
