@@ -368,6 +368,7 @@ class CButtonElement extends HTMLElement {
 }
 class TabsElement extends HTMLInputElement {
   static elementName = 'c-tab';
+
   constructor() {
     super();
     this.type = 'radio';
@@ -378,7 +379,7 @@ class TabsElement extends HTMLInputElement {
       }
     }
 
-    let allTab = document.querySelectorAll(`input[is="c-tab"][name="${this.name}"]`);
+    let allTab;
 
     setInterval(() => {
       allTab = document.querySelectorAll(`input[is="c-tab"][name="${this.name}"]`);

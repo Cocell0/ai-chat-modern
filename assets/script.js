@@ -22,16 +22,17 @@ chatChannels.forEach((channel) => {
   const label = document.createElement('label');
   const tab = document.createElement('input');
   const name = document.createElement('span');
-  
+
   label.appendChild(tab);
   label.setAttribute('for', strings.for);
-  
+
   tab.setAttribute('is', 'c-tab');
   tab.id = strings.for;
-  tab.setAttribute('value', 'MAIN-FRAME-fules')
-  
+  tab.name = 'MAIN-TABS'
+  tab.setAttribute('value', 'MAIN-FRAME-rules')
+
   name.innerText = channel;
   label.appendChild(name)
-  
+
   navigationTab.appendChild(label);
 })
