@@ -373,6 +373,14 @@ class TabsElement extends HTMLInputElement {
     super();
     this.type = 'radio';
 
+    if (!window[`${this.name}NodeList`]) {
+      window[`${this.name}NodeList`] = [];
+    }
+    window[`${this.name}NodeList`].push(this);
+
+    console.log(`${this.name}NodeList`);
+    console.log(window[`${this.name}NodeList`]);
+
     if (!this.checked) {
       if (document.getElementById(this.value)) {
         document.getElementById(this.value).hidden = true;
@@ -381,11 +389,11 @@ class TabsElement extends HTMLInputElement {
 
     let allTab;
 
-    setInterval(() => {
-      allTab = document.querySelectorAll(`input[is="c-tab"][name="${this.name}"]`);
-    }, 600);
-
     this.addEventListener('change', () => {
+      setInterval(() => {
+        allTab = document.querySelectorAll(`input[is="c-tab"][name="${this.name}"]`);
+      }, 600);
+
       allTab.forEach((eachTab) => {
         const tabFrame = document.getElementById(eachTab.value);
 

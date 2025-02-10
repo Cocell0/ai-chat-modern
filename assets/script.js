@@ -28,7 +28,7 @@ chatChannels.forEach((channel) => {
 
   tab.setAttribute('is', 'c-tab');
   tab.id = strings.for;
-  tab.name = 'MAIN-TABS'
+  tab.name = 'mainTabs'
   tab.setAttribute('value', 'MAIN-FRAME-rules')
 
   name.innerText = channel;
