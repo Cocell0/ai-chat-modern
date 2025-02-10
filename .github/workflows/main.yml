@@ -30,8 +30,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Install filo globally
-        run: npm install -g filo
+      - name: Install Filo globally
+        run: npm install -g @cocell/filo
 
       - name: Process index.html
         run: filo index.html
