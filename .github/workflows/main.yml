@@ -28,13 +28,16 @@ jobs:
           node-version: 22
 
       - name: Install dependencies
-        run: npm install dotenv puppeteer @cocell/filo
+        run: npm install
+
+      - name: Install filo globally
+        run: npm install -g filo
 
       - name: Process index.html
         run: filo index.html
 
       - name: Run Puppeteer script
         env:
-            APP_LOCATION: ${{ secrets.APP_LOCATION }}
-            APP_LOCATION_DEVELOPMENT: ${{ secrets.APP_LOCATION_DEVELOPMENT }}
+          APP_LOCATION: ${{ secrets.APP_LOCATION }}
+          APP_LOCATION_DEVELOPMENT: ${{ secrets.APP_LOCATION_DEVELOPMENT }}
         run: node puppeteer-deploy.js
