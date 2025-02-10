@@ -28,7 +28,7 @@ jobs:
           node-version: 22
 
       - name: Install dependencies
-        run: npm install
+        run: npm install dotenv puppeteer @cocell/filo
 
       - name: Process index.html
         run: filo index.html
