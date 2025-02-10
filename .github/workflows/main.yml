@@ -31,7 +31,7 @@ jobs:
         run: npm install
 
       - name: Process index.html
-        run: node filo.js index.html
+        run: filo index.html
 
       - name: Run Puppeteer script
         env:
